@@ -16,6 +16,11 @@ configurations {
 		extendsFrom annotationProcessor
 	}
 }
+bootJar {
+	from('.ebextensions') {
+		into('.ebextensions' )
+	}
+}
 
 repositories {
 	mavenCentral()

@@ -1,7 +1,7 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "351142990207.dkr.ecr.ap-northeast-2.amazonaws.com/catchplan-demo",
+    "Name": "351142990207.dkr.ecr.ap-northeast-2.amazonaws.com/catchplan-demo:latest",
     "Update": "true"
   },
   "Ports": [
