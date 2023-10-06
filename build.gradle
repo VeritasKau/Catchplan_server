@@ -41,8 +41,8 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok' //Lombok 의존성
 	annotationProcessor 'org.projectlombok:lombok' //Lombok 의존성
 
-	runtimeOnly 'com.mysql:mysql-connector-j' // MySQL 드라이버 의존성
-
+	//runtimeOnly 'com.mysql:mysql-connector-j' // MySQL 드라이버 의존성
+	implementation 'com.mysql:mysql-connector-j'
 	//implementation 'org.springframework.security:spring-security-oauth2-client:5.7.5'
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
