@@ -1,32 +1,34 @@
 package Sanhak.wakeUp.team.entity;
 
+import Sanhak.wakeUp.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@ToString
+@Entity
 @Getter
+@Setter
+@Table(name = "UserInfo")
 @Builder
 @AllArgsConstructor
-@Entity
-@Setter
-@NoArgsConstructor
-@Table(name="user")
-public class Users {
+public class UserInfo extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
     private String name;
-    private String email;
-    private String password;
-    private Integer age;
+    private String sex;
+    private String genre;
+    private String mbti;
+    @Column(name = "unique_user_info")
+    private String uniqueUserInfo;
 
-
-    public Users(String name, String email, String password, Integer age) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.age = age;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+    public UserInfo() {
     }
+
+}
 
 
 //    public static void setName(String name) {
@@ -41,7 +43,7 @@ public class Users {
 //    private void setPassword(String password) {
 //        this.password = password;
 //    }
-}
+
 
 
 

@@ -1,0 +1,39 @@
+package Sanhak.wakeUp.team.service;
+
+import Sanhak.wakeUp.team.entity.Member;
+import Sanhak.wakeUp.team.repository.MemberRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
+@Transactional
+@Service
+public class MemberService {
+    private final MemberRepository memberRepository;
+
+    public MemberService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+    public Member findOrCreateMemberByUniqueUserInfo(String uniqueUserInfo) {
+        Member existingMember = memberRepository.findByUniqueUserInfo(uniqueUserInfo).orElse(null);
+        if (existingMember == null) {
+            Member newMember = new Member();
+            newMember.setUniqueUserInfo(uniqueUserInfo);
+            return memberRepository.save(newMember);
+        }
+        return existingMember;
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Member> findByUniqueUserInfo(String uniqueUserInfo) {
+        return memberRepository.findByUniqueUserInfo(uniqueUserInfo);
+    }
+
+    public boolean checkIfMemberExists(String uniqueUserInfo) {
+        Optional<Member> existingMember = memberRepository.findByUniqueUserInfo(uniqueUserInfo);
+        return existingMember.isPresent();
+    }
+
+
+}
