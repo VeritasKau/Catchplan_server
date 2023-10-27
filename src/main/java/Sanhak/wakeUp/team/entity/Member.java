@@ -8,6 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -26,9 +29,10 @@ public class Member extends BaseTimeEntity {
     private String sex;
     private String genre;
     private String mbti;
-    private String token;
+
+    @OneToMany(mappedBy = "member")
+    private List<Scrap> scraps = new ArrayList<>();
     public Member() {
-        // 필요하다면 기본 값을 초기화할 수 있습니다.
     }
 
     public void setUniqueUserInfo(String uniqueUserInfo) {

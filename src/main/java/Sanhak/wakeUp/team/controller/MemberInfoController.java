@@ -10,8 +10,6 @@ import Sanhak.wakeUp.team.repository.MemberRepository;
 import Sanhak.wakeUp.team.service.MemberService;
 import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +24,8 @@ import java.time.LocalDateTime;
 @RequestMapping("/api/memberInfo")
 public class MemberInfoController {
     private final MemberService memberService;
-    private final TokenValidator tokenValidator; // TokenValidator 주입
-    private final MemberRepository memberRepository; // MemberRepository 주입
+    private final TokenValidator tokenValidator;
+    private final MemberRepository memberRepository;
 
 
     @Autowired

@@ -15,16 +15,16 @@
 #              - phone_number
 spring:
 
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://awseb-e-iqft7xjffq-stack-awsebrdsdatabase-k5jzrhqspslx.cmsm8zjdzvh7.ap-northeast-2.rds.amazonaws.com:3306/beanstalk?serverTimezone=Asia/Seoul
-#    username: sunneng
-#    password: llgy88388!
   datasource:
-    url: jdbc:h2:tcp://localhost/~/team
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://awseb-e-iqft7xjffq-stack-awsebrdsdatabase-k5jzrhqspslx.cmsm8zjdzvh7.ap-northeast-2.rds.amazonaws.com:3306/beanstalk?serverTimezone=Asia/Seoul
+    username: sunneng
+    password: llgy88388!
+#  datasource:
+#    url: jdbc:h2:tcp://localhost/~/team1
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
 
   jpa:
     hibernate:
@@ -47,8 +47,14 @@ token:
     server:
       url: http://catchplan-env.eba-ngqypwbe.ap-northeast-2.elasticbeanstalk.com
 
+#springdoc:
+#  api-docs:
+#    path: /swagger-ui.html
+
+
 springdoc:
-  api-docs:
-    path: /swagger-ui.html
-
-
+  swagger-ui:
+    enabled: true
+    path: '/api/api-docs.html'
+    try-it-out-enabled: false
+  version: 'v1'
