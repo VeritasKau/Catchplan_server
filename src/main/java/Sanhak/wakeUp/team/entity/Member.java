@@ -6,9 +6,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 public class Member extends BaseTimeEntity {
@@ -17,31 +19,20 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_id")
     private Long id;
 
-
     @Column(unique = true, length = 50, nullable = false)
     private String uniqueUserInfo;
 
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UserInfo userInfo;
-
-    // public 생성자
+    private String name;
+    private String sex;
+    private String genre;
+    private String mbti;
+    private String token;
     public Member() {
-        this.userInfo = new UserInfo();
-        this.userInfo.setMember(this);
+        // 필요하다면 기본 값을 초기화할 수 있습니다.
     }
 
-    // public setter 메서드
     public void setUniqueUserInfo(String uniqueUserInfo) {
         this.uniqueUserInfo = uniqueUserInfo;
     }
-    public UserInfo getUserInfo() {
-        return userInfo;
-    }
-
-//    public void setUserInfo(UserInfo userInfo) {
-//        this.userInfo = userInfo;
-//    }
 
 }

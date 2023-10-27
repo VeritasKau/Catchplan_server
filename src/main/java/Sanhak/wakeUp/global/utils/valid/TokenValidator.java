@@ -1,18 +1,19 @@
 package Sanhak.wakeUp.global.utils.valid;
 
-import Sanhak.wakeUp.team.controller.MemberController;
+import Sanhak.wakeUp.team.controller.MemberInfoController;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TokenValidator {
-    private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
+    private static final Logger logger = LoggerFactory.getLogger(MemberInfoController.class);
+
 
 
 
@@ -41,10 +42,11 @@ public class TokenValidator {
         }
         return null;
     }
-
-
-
-
-
-
 }
+
+
+
+
+
+
+

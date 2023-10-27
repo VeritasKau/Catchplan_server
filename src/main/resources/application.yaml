@@ -15,11 +15,16 @@
 #              - phone_number
 spring:
 
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://awseb-e-iqft7xjffq-stack-awsebrdsdatabase-k5jzrhqspslx.cmsm8zjdzvh7.ap-northeast-2.rds.amazonaws.com:3306/beanstalk?serverTimezone=Asia/Seoul
+#    username: sunneng
+#    password: llgy88388!
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://awseb-e-iqft7xjffq-stack-awsebrdsdatabase-k5jzrhqspslx.cmsm8zjdzvh7.ap-northeast-2.rds.amazonaws.com:3306/beanstalk?serverTimezone=Asia/Seoul
-    username: sunneng
-    password: llgy88388!
+    url: jdbc:h2:tcp://localhost/~/team
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
 
   jpa:
     hibernate:
