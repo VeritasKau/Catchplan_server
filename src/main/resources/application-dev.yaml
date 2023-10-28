@@ -25,23 +25,4 @@ logging.level:
 server:
   port: 5000
 
- token:
-   secret: c3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwtc3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwtc3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwK
-   access-token-expiration-time: 900000
-   refresh-token-expiration-time: 1209600000
-
-   remote:
-     server:
-       url: http://catchplan-env.eba-ngqypwbe.ap-northeast-2.elasticbeanstalk.com
-
- springdoc:
-   api-docs:
-     path: /swagger-ui.html
-
-
-springdoc:
-  swagger-ui:
-    enabled: true
-    path: '/api/api-docs.html'
-    try-it-out-enabled: false
-  version: 'v1'
+ 
