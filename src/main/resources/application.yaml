@@ -37,7 +37,7 @@
 # logging:
 #   level:
 #     com.tutorial: debug
-
+#
 
 # token:
 #   secret: c3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwtc3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwtc3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwK
