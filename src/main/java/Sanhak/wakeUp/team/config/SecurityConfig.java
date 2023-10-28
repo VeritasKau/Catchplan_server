@@ -1,4 +1,4 @@
-package Sanhak.wakeUp.team.config;//package Sanhak.wakeUp.team.config;
+//package Sanhak.wakeUp.team.config;
 //
 //
 //import Sanhak.wakeUp.team.service.CustomOauth2UserService;
