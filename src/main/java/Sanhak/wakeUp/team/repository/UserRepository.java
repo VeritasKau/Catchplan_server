@@ -1,10 +1,10 @@
-package Sanhak.wakeUp.team.repository;
-
-import Sanhak.wakeUp.team.entity.Users;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-//import java.util.Optional;
+//package Sanhak.wakeUp.team.repository;
 //
-public interface UserRepository extends JpaRepository<Users,Long> {
-
-}
+//import Sanhak.wakeUp.team.entity.Users;
+//import org.springframework.data.jpa.repository.JpaRepository;
+//
+////import java.util.Optional;
+////
+//public interface UserRepository extends JpaRepository<Users,Long> {
+//
+//}
