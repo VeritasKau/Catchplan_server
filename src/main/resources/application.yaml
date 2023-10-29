@@ -82,12 +82,12 @@ spring:
     url: jdbc:mysql://awseb-e-iqft7xjffq-stack-awsebrdsdatabase-k5jzrhqspslx.cmsm8zjdzvh7.ap-northeast-2.rds.amazonaws.com:3306/beanstalk?serverTimezone=Asia/Seoul
     username: sunneng
     password: llgy88388!
-
-#  datasource:
-#    url: jdbc:h2:tcp://localhost/~/team1
-#    username: sa
-#    password:
-#    driver-class-name: org.h2.Driver
+  #
+  #  datasource:
+  #    url: jdbc:h2:tcp://localhost/~/team1
+  #    username: sa
+  #    password:
+  #    driver-class-name: org.h2.Driver
 
   jpa:
     hibernate:
@@ -114,11 +114,4 @@ springdoc:
   api-docs:
     path: /swagger-ui.html
 
-
-#springdoc:
-#  swagger-ui:
-#    enabled: true
-#    path: '/api/api-docs.html'
-#    try-it-out-enabled: false
-#  version: 'v1'
 
