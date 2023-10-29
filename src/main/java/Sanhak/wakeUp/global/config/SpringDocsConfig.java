@@ -41,4 +41,3 @@ public class SpringDocsConfig {
                 .info(info);
     }
 }
-
