@@ -12,7 +12,10 @@ public class MemberInfoUpdateResponse {
 
     private String name;    // 이름
     private String sex;     // 성별
-    private String genre;   // 장르
+    private String genre1;   // 장르
+    private String genre2;   // 장르
+    private String genre3;   // 장르
+
     private String mbti;    // MBTI
     private String transactionTime;
     private String status;
