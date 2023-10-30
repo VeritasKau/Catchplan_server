@@ -52,6 +52,7 @@
 
 
 
+
 package Sanhak.wakeUp.team.entity;
 
 
@@ -81,7 +82,9 @@ public class Member extends BaseTimeEntity {
 
     private String name;
     private String sex;
-    private String genre;
+    private String genre1;
+    private String genre2;
+    private String genre3;
     private String mbti;
 
     @OneToMany(mappedBy = "member")

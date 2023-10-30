@@ -55,7 +55,11 @@ public class MemberInfoController {
         // 멤버 정보 업데이트 로직 구현
         member.setName(userInfoUpdateRequest.getName());
         member.setSex(userInfoUpdateRequest.getSex());
-        member.setGenre(userInfoUpdateRequest.getGenre());
+        member.setGenre1(userInfoUpdateRequest.getGenre1());
+        member.setGenre2(userInfoUpdateRequest.getGenre2());
+        member.setGenre3(userInfoUpdateRequest.getGenre3());
+
+
         member.setMbti(userInfoUpdateRequest.getMbti());
 
         // MemberRepository를 사용하여 멤버 정보 저장
@@ -65,7 +69,10 @@ public class MemberInfoController {
         MemberInfoUpdateResponse memberInfoUpdateResponse = MemberInfoUpdateResponse.builder()
                 .name(member.getName())
                 .sex(member.getSex())
-                .genre(member.getGenre())
+                .genre1(member.getGenre1())
+                .genre2(member.getGenre2())
+                .genre3(member.getGenre3())
+
                 .mbti(member.getMbti())
                 .transactionTime(LocalDateTime.now().toString())
                 .status(HttpStatus.OK.toString())
