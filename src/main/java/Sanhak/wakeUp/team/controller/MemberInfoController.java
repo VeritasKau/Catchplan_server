@@ -1,7 +1,7 @@
 //package Sanhak.wakeUp.team.controller;
 //
-////import Sanhak.wakeUp.global.exception.GlobalExceptionHandler;
-////import Sanhak.wakeUp.global.utils.dto.ErrorResponse;
+//import Sanhak.wakeUp.global.exception.GlobalExceptionHandler;
+//import Sanhak.wakeUp.global.utils.dto.ErrorResponse;
 //import Sanhak.wakeUp.global.utils.valid.TokenValidator;
 //import Sanhak.wakeUp.team.dto.MemberInfoUpdateRequest;
 //import Sanhak.wakeUp.team.dto.MemberInfoUpdateResponse;
@@ -19,7 +19,6 @@
 //
 //import javax.validation.Valid;
 //import java.time.LocalDateTime;
-//
 //@RestController
 //@RequestMapping("/api/memberInfo")
 //public class MemberInfoController {
@@ -47,33 +46,33 @@
 //        // JWT 토큰 검증
 //        Claims claims = tokenValidator.validateToken(authorizationHeader.replace("Bearer ", ""));
 //
-//        String uniqueUserInfo = claims.get("uniqueUserInfo", String.class);
+//            String uniqueUserInfo = claims.get("uniqueUserInfo", String.class);
 //
-//        // 여기서 uniqueUserInfo를 사용하여 멤버 정보를 가져오거나 생성
-//        Member member = memberService.findOrCreateMemberByUniqueUserInfo(uniqueUserInfo);
+//            // 여기서 uniqueUserInfo를 사용하여 멤버 정보를 가져오거나 생성
+//            Member member = memberService.findOrCreateMemberByUniqueUserInfo(uniqueUserInfo);
 //
-//        // 멤버 정보 업데이트 로직 구현
-//        member.setName(userInfoUpdateRequest.getName());
-//        member.setSex(userInfoUpdateRequest.getSex());
-//        member.setGenre(userInfoUpdateRequest.getGenre());
-//        member.setMbti(userInfoUpdateRequest.getMbti());
+//            // 멤버 정보 업데이트 로직 구현
+//            member.setName(userInfoUpdateRequest.getName());
+//            member.setSex(userInfoUpdateRequest.getSex());
+//            member.setGenre(userInfoUpdateRequest.getGenre());
+//            member.setMbti(userInfoUpdateRequest.getMbti());
 //
-//        // MemberRepository를 사용하여 멤버 정보 저장
-//        member = memberRepository.save(member);
+//            // MemberRepository를 사용하여 멤버 정보 저장
+//            member = memberRepository.save(member);
 //
-//        // MemberInfoUpdateResponse 객체 초기화
-//        MemberInfoUpdateResponse memberInfoUpdateResponse = MemberInfoUpdateResponse.builder()
-//                .name(member.getName())
-//                .sex(member.getSex())
-//                .genre(member.getGenre())
-//                .mbti(member.getMbti())
-//                .transactionTime(LocalDateTime.now().toString())
-//                .status(HttpStatus.OK.toString())
-//                .description("The operation has been successfully completed.")
-//                .statusCode(HttpStatus.OK.value())
-//                .build();
+//            // MemberInfoUpdateResponse 객체 초기화
+//            MemberInfoUpdateResponse memberInfoUpdateResponse = MemberInfoUpdateResponse.builder()
+//                    .name(member.getName())
+//                    .sex(member.getSex())
+//                    .genre(member.getGenre())
+//                    .mbti(member.getMbti())
+//                    .transactionTime(LocalDateTime.now().toString())
+//                    .status(HttpStatus.OK.toString())
+//                    .description("The operation has been successfully completed.")
+//                    .statusCode(HttpStatus.OK.value())
+//                    .build();
 //
-//        return ResponseEntity.ok(memberInfoUpdateResponse);
+//            return ResponseEntity.ok(memberInfoUpdateResponse);
 //
 //    }
 //}
