@@ -16,13 +16,11 @@ public class SpringDocsConfig {
     @Bean
     public OpenAPI openAPI() {
         Info info = new Info()
-                .title("Catchplan API 문서") // 타이틀
-                .version("v1") // 문서 버전
-                .description("Catchplan API") // 문서 설명
-                .contact(new Contact() // 연락처
-                        .name("JSJ"));
+                .title("Catchplan API 문서")
+                .version("v1")
+                .description("Catchplan API")
+                .contact(new Contact().name("JSJ"));
 
-        // Security 스키마 설정
         SecurityScheme bearerAuth = new SecurityScheme()
                 .type(SecurityScheme.Type.HTTP)
                 .scheme("bearer")
@@ -30,13 +28,11 @@ public class SpringDocsConfig {
                 .in(SecurityScheme.In.HEADER)
                 .name(HttpHeaders.AUTHORIZATION);
 
-        SecurityRequirement securityItem = new SecurityRequirement();
-        securityItem.addList("Authorization");
+        SecurityRequirement securityItem = new SecurityRequirement()
+                .addList("Authorization");
 
         return new OpenAPI()
-                // Security 인증 컴포넌트 설정
                 .components(new Components().addSecuritySchemes("Authorization", bearerAuth))
-                // API 마다 Security 인증 컴포넌트 설정
                 .addSecurityItem(securityItem)
                 .info(info);
     }
