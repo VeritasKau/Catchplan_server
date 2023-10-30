@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SecurityConfig {
-    //@Value("${token.access-expired-time}")
     @Value("${token.access-token-expiration-time}")
     private String accessTokenExpirationTime;
 
