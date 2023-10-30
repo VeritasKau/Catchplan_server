@@ -56,8 +56,3 @@ public class TokenController {
         return ResponseEntity.ok(jwtTokenDto);
     }
 }
-
-
-
-
-
