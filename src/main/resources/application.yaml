@@ -13,33 +13,33 @@
 #              - profile_name
 #              - prifile_nickname
 #              - phone_number
- spring:
+spring:
 
-   datasource:
-     driver-class-name: com.mysql.cj.jdbc.Driver
-     url: jdbc:mysql://awseb-e-iqft7xjffq-stack-awsebrdsdatabase-k5jzrhqspslx.cmsm8zjdzvh7.ap-northeast-2.rds.amazonaws.com:3306/beanstalk?serverTimezone=Asia/Seoul
-     username: sunneng
-     password: llgy88388!
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://awseb-e-iqft7xjffq-stack-awsebrdsdatabase-k5jzrhqspslx.cmsm8zjdzvh7.ap-northeast-2.rds.amazonaws.com:3306/beanstalk?serverTimezone=Asia/Seoul
+    username: sunneng
+    password: llgy88388!
 
-   jpa:
-     hibernate:
-       ddl-auto: update
-     properties:
-       hibernate:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
          format_sql: true
          show_sql: true
- logging:
-   level:
-     com.tutorial: debug
+logging:
+  level:
+    com.tutorial: debug
 
- token:
-   secret: c3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwtc3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwtc3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwK
-   access-token-expiration-time: 900000
-   refresh-token-expiration-time: 1209600000
+token:
+  secret: c3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwtc3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwtc3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwK
+  access-token-expiration-time: 900000
+  refresh-token-expiration-time: 1209600000
 
-   remote:
-     server:
-       url: http://catchplan-env.eba-ngqypwbe.ap-northeast-2.elasticbeanstalk.com
+  remote:
+    server:
+      url: http://catchplan-env.eba-ngqypwbe.ap-northeast-2.elasticbeanstalk.com
 #
 # springdoc:
 #   version: v1
@@ -57,6 +57,8 @@
 #       enabled: true
 #   cache:
 #     disabled: true
- springdoc:
-   api-docs:
-     path: /swagger-ui.html
+
+springdoc:
+  api-docs:
+    path: /swagger-ui.html
+
