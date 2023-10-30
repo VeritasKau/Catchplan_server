@@ -1,18 +1,4 @@
-#  security:
-#    oauth2:
-#      client:
-#        registration:
-#          naver:
-#            client-id: uSjN60Ag6PE3mFlODR7z
-#            client-secret: XxbGt7LJ_l
-#            client-name: Naver
-#            redirect-uri: "{http://catchplan-env.eba-ngqypwbe.ap-northeast-2.elasticbeanstalk.com}/login/oauth2/code/{hdn1015}"
-#
-##            redirect-uri: "{http://localhost:8080}/login/oauth2/code/{hdn1015}"
-#            scope:
-#              - profile_name
-#              - prifile_nickname
-#              - phone_number
+
 spring:
 
   datasource:
