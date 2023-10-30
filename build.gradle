@@ -57,6 +57,11 @@ dependencies {
 	//runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j' // MySQL 드라이버 의존성
 
+
+	//추가
+//	implementation 'javax.validation:validation-api:2.0.1.Final'
+//	implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
+
 }
 
 tasks.named('test') {

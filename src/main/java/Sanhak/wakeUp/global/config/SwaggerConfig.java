@@ -1,3 +1,4 @@
+//필요없음
 package Sanhak.wakeUp.global.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
