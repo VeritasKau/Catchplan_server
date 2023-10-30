@@ -1,7 +1,6 @@
 package Sanhak.wakeUp.team.controller;
 
-//import Sanhak.wakeUp.global.exception.GlobalExceptionHandler;
-//import Sanhak.wakeUp.global.utils.dto.ErrorResponse;
+
 import Sanhak.wakeUp.global.utils.valid.TokenValidator;
 import Sanhak.wakeUp.team.dto.MemberInfoUpdateRequest;
 import Sanhak.wakeUp.team.dto.MemberInfoUpdateResponse;
