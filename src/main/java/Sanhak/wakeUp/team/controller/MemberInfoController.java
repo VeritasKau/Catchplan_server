@@ -1,10 +1,14 @@
 package Sanhak.wakeUp.team.controller;
 
 
+import Sanhak.wakeUp.global.exception.TokenNotFoundException;
+import Sanhak.wakeUp.global.exception.TokenValidationException;
+import Sanhak.wakeUp.global.utils.dto.ErrorResponse;
 import Sanhak.wakeUp.global.utils.valid.TokenValidator;
 import Sanhak.wakeUp.team.dto.MemberInfoUpdateRequest;
 import Sanhak.wakeUp.team.dto.MemberInfoUpdateResponse;
 import Sanhak.wakeUp.team.entity.Member;
+import Sanhak.wakeUp.team.exception.UserNotFoundException;
 import Sanhak.wakeUp.team.repository.MemberRepository;
 import Sanhak.wakeUp.team.service.MemberService;
 import io.jsonwebtoken.Claims;
@@ -83,26 +87,32 @@ public class MemberInfoController {
 
     }
 
-
     @Operation(summary = "Delete Member", description = "Delete a member's account.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Member deleted successfully"),
     })
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteMember(@RequestHeader(name = "Authorization") String authorizationHeader) {
-        // JWT 토큰 검증
-        Claims claims = tokenValidator.validateToken(authorizationHeader.replace("Bearer ", ""));
-        String uniqueUserInfo = claims.get("uniqueUserInfo", String.class);
+    public ResponseEntity<ErrorResponse> deleteMember(@RequestHeader(name = "Authorization") String authorizationHeader) {
+        try {
+            // JWT 토큰 검증
+            Claims claims = tokenValidator.validateToken(authorizationHeader.replace("Bearer ", ""));
+            String uniqueUserInfo = claims.get("uniqueUserInfo", String.class);
 
-        Member member = memberService.findByUniqueUserInfo(uniqueUserInfo);
+            Member member = memberService.findByUniqueUserInfo(uniqueUserInfo);
 
-        if (member != null) {
-            // 멤버 정보가 존재하면 삭제
-            memberService.deleteMember(member.getId());
-            return ResponseEntity.ok("Member deleted successfully.");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member not found.");
+            if (member != null) {
+                // 멤버 정보가 존재하면 삭제
+                memberService.deleteMember(member.getId());
+                ErrorResponse response = new ErrorResponse(
+                        LocalDateTime.now().toString(), "success", "Member deleted successfully", 200);
+                return ResponseEntity.ok(response);
+            } else {
+                throw new UserNotFoundException("Member not found");
+            }
+        } catch (TokenNotFoundException e) {
+            throw e;
+        } catch (TokenValidationException e) {
+            throw e;
         }
     }
-
 }
