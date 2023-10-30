@@ -1,4 +1,4 @@
-//package Sanhak.wakeUp.team.entity.event;
+package Sanhak.wakeUp.team.entity.event;//package Sanhak.wakeUp.team.entity.event;
 //
 //import Sanhak.wakeUp.team.entity.Scrap;
 //import jakarta.persistence.*;
