@@ -19,14 +19,10 @@ public class Scrap extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
-    private Event event;
-
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "camping_id")
-//    private Camping camping;
+    @JoinColumn(name = "camping_id")
+    private Camping camping;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "classic_id")
