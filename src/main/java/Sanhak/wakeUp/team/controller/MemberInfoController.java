@@ -87,7 +87,6 @@ public class MemberInfoController {
     @Operation(summary = "Delete Member", description = "Delete a member's account.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Member deleted successfully"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteMember(@RequestHeader(name = "Authorization") String authorizationHeader) {
@@ -95,7 +94,6 @@ public class MemberInfoController {
         Claims claims = tokenValidator.validateToken(authorizationHeader.replace("Bearer ", ""));
         String uniqueUserInfo = claims.get("uniqueUserInfo", String.class);
 
-        // 여기서 uniqueUserInfo를 사용하여 멤버 정보를 가져오거나 삭제
         Member member = memberService.findByUniqueUserInfo(uniqueUserInfo);
 
         if (member != null) {
