@@ -33,5 +33,13 @@ public class MemberService {
         return existingMember.isPresent();
     }
 
-}
+    public Member findByUniqueUserInfo(String uniqueUserInfo) {
+        Optional<Member> existingMember = memberRepository.findByUniqueUserInfo(uniqueUserInfo);
+        return existingMember.orElse(null);
+    }
 
+    public void deleteMember(Long memberId) {
+        memberRepository.deleteById(memberId);
+    }
+
+}
