@@ -45,29 +45,3 @@ public class TokenController {
         return jwtTokenDto;
     }
 }
-//
-//@RestController
-//@RequestMapping("/api/token")
-//public class TokenController {
-//    private final TokenManager tokenManager;
-//    private final MemberService memberService;
-//
-//    @Autowired
-//    public TokenController(TokenManager tokenManager, MemberService memberService) {
-//        this.tokenManager = tokenManager;
-//        this.memberService = memberService;
-//    }
-//    @Operation(summary = "Generate JWT Token", description = "Generate a JWT token for the provided unique user information.")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Token generated successfully"),
-//            @ApiResponse(responseCode = "400", description = "Bad Request"),
-//            @ApiResponse(responseCode = "500", description = "Internal Server Error")
-//    })
-//    @PostMapping("/generate")
-//    public JwtTokenDto generateToken(@io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))) @RequestBody Map<String, String> requestBody) {
-//        String uniqueUserInfo = requestBody.get("uniqueUserInfo");
-//        Member member = memberService.findOrCreateMemberByUniqueUserInfo(uniqueUserInfo); // DB에 저장
-//        JwtTokenDto jwtTokenDto = tokenManager.createJwtTokenDto(uniqueUserInfo);
-//        return jwtTokenDto;
-//    }
-//}
