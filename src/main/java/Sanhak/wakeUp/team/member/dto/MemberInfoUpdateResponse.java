@@ -22,5 +22,4 @@ public class MemberInfoUpdateResponse {
     private String description;
     private int statusCode;
 
-
 }

@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findByDtype(String dtype);
     Optional<Event> findById(Long id);
-
+    List<Event> findByPlaceContaining(String place);
     List<Event> findByText(String text);
     List<Event> findByPlace(String place);
 }

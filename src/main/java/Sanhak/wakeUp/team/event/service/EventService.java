@@ -110,26 +110,55 @@ public class EventService {
     };
 
     //장소로 event검색해주기
-    public List<EventResponse> getEventByPlace(String place ) {
-        List<Event> events = eventRepository.findByPlace(place);
+//    public List<EventResponse> getEventByPlace(String place ) {
+//        List<Event> events = eventRepository.findByPlace(place);
+//        List<EventResponse> eventResponses = new ArrayList<>();
+//
+//        for(Event event:events){
+//            EventResponse eventResponse = EventResponse.of(
+//                    event.getId(),
+//                    event.getImage(),
+//                    event.getDtype(),
+//                    event.getText(),
+//                    event.getPlace(),
+//                    event.getDuration(),
+//                    event.getUrl(),
+//                    event.getDetail(),
+//                    event.getDetail2(),
+//                    event.getStatus()
+//            );
+//            eventResponses.add(eventResponse);
+//        }
+//        return eventResponses;
+//    };
+
+    public List<EventResponse> getEventByPlace(String place) {
+        List<Event> events = eventRepository.findByPlaceContaining(place); // 'place'가 포함된 항목을 검색
         List<EventResponse> eventResponses = new ArrayList<>();
 
-        for(Event event:events){
-            EventResponse eventResponse = EventResponse.of(
-                    event.getId(),
-                    event.getImage(),
-                    event.getDtype(),
-                    event.getText(),
-                    event.getPlace(),
-                    event.getDuration(),
-                    event.getUrl(),
-                    event.getDetail(),
-                    event.getDetail2(),
-                    event.getStatus()
-            );
-            eventResponses.add(eventResponse);
+        if (events != null && !events.isEmpty()) {
+            for (Event event : events) {
+                EventResponse eventResponse = EventResponse.of(
+                        event.getId(),
+                        event.getImage(),
+                        event.getDtype(),
+                        event.getText(),
+                        event.getPlace(),
+                        event.getDuration(),
+                        event.getUrl(),
+                        event.getDetail(),
+                        event.getDetail2(),
+                        event.getStatus()
+                );
+                eventResponses.add(eventResponse);
+            }
+        } else {
+            EventResponse noEventResponse = new EventResponse();
+            noEventResponse.setText("No events found for the specified place: " + place);
+            eventResponses.add(noEventResponse);
         }
+
         return eventResponses;
-    };
+    }
 
 }
