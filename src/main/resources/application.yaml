@@ -3,8 +3,8 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://awseb-e-iqft7xjffq-stack-awsebrdsdatabase-k5jzrhqspslx.cmsm8zjdzvh7.ap-northeast-2.rds.amazonaws.com:3306/beanstalk?serverTimezone=Asia/Seoul
-    username: sunneng
+    url: jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Seoul  #본인에 맞는 local db url 설정 하기
+    username: root
     password: llgy88388!
 
   jpa:
