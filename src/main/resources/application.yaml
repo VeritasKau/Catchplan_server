@@ -21,8 +21,8 @@ logging:
 
 token:
   secret: c3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwtc3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwtc3ByaW5nYm9vdC1qd3QtdHV0b3JpYWwK
-  access-token-expiration-time: 900000
-  refresh-token-expiration-time: 1209600000
+  access-token-expiration-time: 1209600000
+  refresh-token-expiration-time: 63200000000
 
   remote:
     server:
