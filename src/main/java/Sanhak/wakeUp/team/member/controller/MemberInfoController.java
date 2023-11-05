@@ -37,6 +37,15 @@ public class MemberInfoController {
         this.tokenValidator = tokenValidator;
         this.memberRepository = memberRepository;
     }
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Member checked successfully"),
+    })
+    @GetMapping("/checkMember")
+    public ResponseEntity<Boolean> checkMember(@RequestParam("uniqueUserInfo") String uniqueUserInfo) {
+        boolean isMemberExists = memberService.isDuplicateUser(uniqueUserInfo);
+
+        return ResponseEntity.ok(isMemberExists);
+    }
 
     @Operation(summary = "Update MemberInfo", description = "Update a MemberInfo.")
     @ApiResponses(value = {
