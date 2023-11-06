@@ -8,6 +8,7 @@ import Sanhak.wakeUp.team.global.utils.valid.TokenValidator;
 import Sanhak.wakeUp.team.member.dto.MemberInfoUpdateRequest;
 import Sanhak.wakeUp.team.member.dto.MemberInfoUpdateResponse;
 import Sanhak.wakeUp.team.member.entity.Member;
+import Sanhak.wakeUp.team.member.exception.BadRequestException;
 import Sanhak.wakeUp.team.member.exception.UserNotFoundException;
 import Sanhak.wakeUp.team.member.repository.MemberRepository;
 import Sanhak.wakeUp.team.member.service.MemberService;
@@ -135,30 +136,31 @@ public class MemberInfoController {
     public ResponseEntity<MemberInfoUpdateResponse> getMemberInfo(@RequestParam("uniqueUserInfo") String uniqueUserInfo) {
         Member member = memberService.findByUniqueUserInfo(uniqueUserInfo);
 
-        if (member != null) {
-            MemberInfoUpdateResponse memberInfoResponse = new MemberInfoUpdateResponse();
-            memberInfoResponse.setName(member.getName());
-            memberInfoResponse.setSex(member.getSex());
-            memberInfoResponse.setGenre1(member.getGenre1());
-            memberInfoResponse.setGenre2(member.getGenre2());
-            memberInfoResponse.setGenre3(member.getGenre3());
-            memberInfoResponse.setMbti(member.getMbti());
+        try {
+
+            MemberInfoUpdateResponse memberInfoResponse = MemberInfoUpdateResponse.builder()
+                    .transactionTime(LocalDateTime.now().toString())
+                    .status(HttpStatus.OK.toString())
+                    .description("Member information retrieved successfully")
+                    .statusCode(HttpStatus.OK.value())
+                    .name(member.getName())
+                    .sex(member.getSex())
+                    .genre1(member.getGenre1())
+                    .genre2(member.getGenre2())
+                    .genre3(member.getGenre3())
+                    .mbti(member.getMbti())
+              .build();
+
 
             return ResponseEntity.ok(memberInfoResponse);
-        } else {
-            return ResponseEntity.notFound().build();
+        } catch (BadRequestException e) {
+            throw e;
+        } catch (UserNotFoundException e) {
+            throw e;
         }
     }
 
 
-//    @Operation(summary = "Find MemberInfo", description = "Find a MemberInfo.")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "MemberInfo fined successfully"),
-//    })
-//    @GetMapping("/findMember")
-//    public ResponseEntity<Boolean> checkMemberInfo(@RequestParam("uniqueUserInfo") String uniqueUserInfo) {
-//        boolean isMemberExists = memberService.isDuplicateUser(uniqueUserInfo);
-//
-//        return ResponseEntity.ok(isMemberExists);
-//    }
+
+
 }
