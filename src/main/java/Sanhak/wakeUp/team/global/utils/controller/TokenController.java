@@ -39,9 +39,9 @@ public class TokenController {
         String uniqueUserInfo = memberRequest.getUniqueUserInfo();
 
         // 중복 사용자 확인
-        if (memberService.isDuplicateUser(uniqueUserInfo)) {
-            throw new DuplicateUserException("중복된 사용자가 있습니다. uniqueUserInfo: " + uniqueUserInfo);
-        }
+//        if (memberService.isDuplicateUser(uniqueUserInfo)) {
+//            throw new DuplicateUserException("중복된 사용자가 있습니다. uniqueUserInfo: " + uniqueUserInfo);
+//        }
         Member member = memberService.findOrCreateMemberByUniqueUserInfo(uniqueUserInfo);
 
 

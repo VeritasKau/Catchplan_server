@@ -37,6 +37,9 @@ public class MemberInfoController {
         this.tokenValidator = tokenValidator;
         this.memberRepository = memberRepository;
     }
+
+
+    @Operation(summary = "Check MemberInfo", description = "Check a MemberInfo.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Member checked successfully"),
     })
@@ -124,4 +127,38 @@ public class MemberInfoController {
             throw e;
         }
     }
+    @Operation(summary = "Get MemberInfo", description = "Get member's information by uniqueUserInfo")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Member information retrieved successfully")
+    })
+    @GetMapping("/getMemberInfo")
+    public ResponseEntity<MemberInfoUpdateResponse> getMemberInfo(@RequestParam("uniqueUserInfo") String uniqueUserInfo) {
+        Member member = memberService.findByUniqueUserInfo(uniqueUserInfo);
+
+        if (member != null) {
+            MemberInfoUpdateResponse memberInfoResponse = new MemberInfoUpdateResponse();
+            memberInfoResponse.setName(member.getName());
+            memberInfoResponse.setSex(member.getSex());
+            memberInfoResponse.setGenre1(member.getGenre1());
+            memberInfoResponse.setGenre2(member.getGenre2());
+            memberInfoResponse.setGenre3(member.getGenre3());
+            memberInfoResponse.setMbti(member.getMbti());
+
+            return ResponseEntity.ok(memberInfoResponse);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+//    @Operation(summary = "Find MemberInfo", description = "Find a MemberInfo.")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "MemberInfo fined successfully"),
+//    })
+//    @GetMapping("/findMember")
+//    public ResponseEntity<Boolean> checkMemberInfo(@RequestParam("uniqueUserInfo") String uniqueUserInfo) {
+//        boolean isMemberExists = memberService.isDuplicateUser(uniqueUserInfo);
+//
+//        return ResponseEntity.ok(isMemberExists);
+//    }
 }
