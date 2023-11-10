@@ -1,17 +1,17 @@
 spring:
 
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Seoul
-    username: root
-    password: tkfkdgkf123!
-
-#   서버올릴땐 밑에 걸로
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
 #    url: jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Seoul
 #    username: root
-#    password: llgy88388!
+#    password: tkfkdgkf123!
+#
+##   서버올릴땐 밑에 걸로
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Seoul
+    username: root
+    password: llgy88388!
 
   jpa:
     hibernate:
