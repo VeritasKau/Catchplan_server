@@ -32,8 +32,7 @@ public class Member extends BaseTimeEntity {
     private String genre3;
     private String mbti;
 
-    //@OneToMany(mappedBy = "member")
-    //private List<Scrap> scraps = new ArrayList<>();
+
     public Member() {
     }
 

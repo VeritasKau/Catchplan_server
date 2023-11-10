@@ -19,9 +19,5 @@ public class Scrap extends BaseTimeEntity {
     private Member member;
 
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "event_id")
-//    private Event event;
-
 }
 
