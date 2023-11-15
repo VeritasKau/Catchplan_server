@@ -1,5 +1,6 @@
 package Sanhak.wakeUp.team.member.entity;
 
+import Sanhak.wakeUp.team.event.entity.Event;
 import Sanhak.wakeUp.team.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,6 +19,8 @@ public class Scrap extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_id")
+    private Event event;
 }
 
