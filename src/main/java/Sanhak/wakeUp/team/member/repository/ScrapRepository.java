@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ScrapRepository extends JpaRepository<Scrap, Long> {
+    boolean existsByMemberIdAndEventId(Long memberId, Long eventId);
 }

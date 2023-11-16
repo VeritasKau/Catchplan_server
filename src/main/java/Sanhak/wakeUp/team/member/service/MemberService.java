@@ -26,10 +26,8 @@ public class MemberService {
         return existingMember;
     }
     public boolean isDuplicateUser(String uniqueUserInfo) {
-        // 해당 uniqueUserInfo로 사용자를 찾습니다.
         Optional<Member> existingMember = memberRepository.findByUniqueUserInfo(uniqueUserInfo);
 
-        // 사용자가 이미 존재하면 중복 사용자로 간주하고 true를 반환합니다.
         return existingMember.isPresent();
     }
 
