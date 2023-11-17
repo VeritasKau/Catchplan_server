@@ -36,7 +36,6 @@ public class ScrapService {
     }
 
     public void addScrap(String uniqueUserInfo, Long eventId) throws DuplicateScrapException {
-        try {
             // unique_user_info를 사용하여 해당 회원의 member_id를 찾음
             Long memberId = findMemberIdByUniqueUserInfo(uniqueUserInfo);
 
@@ -56,10 +55,7 @@ public class ScrapService {
             scrap.setEvent(event);
 
             scrapRepository.save(scrap);
-        } catch (Exception e) {
-            // 필요한 경우 다른 예외를 처리하고
-            throw new RuntimeException("스크랩 추가 실패", e);
-        }
+
     }
 
 

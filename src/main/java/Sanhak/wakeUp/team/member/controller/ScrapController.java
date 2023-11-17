@@ -16,15 +16,16 @@ import org.springframework.web.bind.annotation.*;
 public class ScrapController {
 
     private final ScrapService scrapService;
-    @PostMapping("/save")
+    @PostMapping
     public ResponseEntity<String> addScrap(@RequestBody ScrapRequest scrapRequest) {
         try {
             scrapService.addScrap(scrapRequest.getUniqueUserInfo(), scrapRequest.getEventId());
             return ResponseEntity.ok("Scrap added successfully");
-        } catch (DuplicateScrapException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Duplicate scrap. This event is already scrapped by the user.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add scrap");
         }
     }
+
     @GetMapping("/{scrapId}/info")
     public ResponseEntity<ScrapInfoResponse> getScrapInfo(@PathVariable Long scrapId) {
         try {
