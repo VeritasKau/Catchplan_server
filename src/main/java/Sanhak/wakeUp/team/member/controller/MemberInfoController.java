@@ -8,6 +8,7 @@ import Sanhak.wakeUp.team.global.utils.valid.TokenValidator;
 import Sanhak.wakeUp.team.member.dto.MemberInfoUpdateRequest;
 import Sanhak.wakeUp.team.member.dto.MemberInfoUpdateResponse;
 import Sanhak.wakeUp.team.member.entity.Member;
+import Sanhak.wakeUp.team.member.exception.BadRequestException;
 import Sanhak.wakeUp.team.member.exception.UserNotFoundException;
 import Sanhak.wakeUp.team.member.repository.MemberRepository;
 import Sanhak.wakeUp.team.member.service.MemberService;
@@ -37,6 +38,9 @@ public class MemberInfoController {
         this.tokenValidator = tokenValidator;
         this.memberRepository = memberRepository;
     }
+
+
+    @Operation(summary = "Check MemberInfo", description = "Check a MemberInfo.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Member checked successfully"),
     })
@@ -124,4 +128,39 @@ public class MemberInfoController {
             throw e;
         }
     }
+    @Operation(summary = "Get MemberInfo", description = "Get member's information by uniqueUserInfo")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Member information retrieved successfully")
+    })
+    @GetMapping("/getMemberInfo")
+    public ResponseEntity<MemberInfoUpdateResponse> getMemberInfo(@RequestParam("uniqueUserInfo") String uniqueUserInfo) {
+        Member member = memberService.findByUniqueUserInfo(uniqueUserInfo);
+
+        try {
+
+            MemberInfoUpdateResponse memberInfoResponse = MemberInfoUpdateResponse.builder()
+                    .transactionTime(LocalDateTime.now().toString())
+                    .status(HttpStatus.OK.toString())
+                    .description("Member information retrieved successfully")
+                    .statusCode(HttpStatus.OK.value())
+                    .name(member.getName())
+                    .sex(member.getSex())
+                    .genre1(member.getGenre1())
+                    .genre2(member.getGenre2())
+                    .genre3(member.getGenre3())
+                    .mbti(member.getMbti())
+              .build();
+
+
+            return ResponseEntity.ok(memberInfoResponse);
+        } catch (BadRequestException e) {
+            throw e;
+        } catch (UserNotFoundException e) {
+            throw e;
+        }
+    }
+
+
+
+
 }

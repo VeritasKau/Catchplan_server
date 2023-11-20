@@ -11,6 +11,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -32,13 +34,18 @@ public class Member extends BaseTimeEntity {
     private String genre3;
     private String mbti;
 
-    //@OneToMany(mappedBy = "member")
-    //private List<Scrap> scraps = new ArrayList<>();
+
     public Member() {
     }
 
     public void setUniqueUserInfo(String uniqueUserInfo) {
         this.uniqueUserInfo = uniqueUserInfo;
     }
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Scrap> scraps;
 
+    public List<Scrap> getScraps() {
+        return scraps;
+
+    }
 }
