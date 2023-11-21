@@ -39,7 +39,7 @@ public class ScrapController {
 
 
 
-    @GetMapping("/getScrap/{scrapId}")
+    @GetMapping("/getScrap")
     public ResponseEntity<ScrapInfoResponse> getScrapInfo(@PathVariable Long scrapId) {
         try {
             ScrapInfoResponse scrapInfoResponse = scrapService.getScrapInfo(scrapId);
