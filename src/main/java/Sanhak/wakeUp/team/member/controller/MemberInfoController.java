@@ -127,29 +127,23 @@ public class MemberInfoController {
             @ApiResponse(responseCode = "200", description = "Member checked successfully"),
     })
     @GetMapping("/checkMember")
-    public ResponseEntity<Boolean> checkMember(@RequestHeader(name = "Authorization") String authorizationHeader) {
-        // JWT 토큰 검증
-        Claims claims = tokenValidator.validateToken(authorizationHeader.replace("Bearer ", ""));
-        String uniqueUserInfo = claims.get("uniqueUserInfo", String.class);
-
+    public ResponseEntity<Boolean> checkMember(@RequestParam("uniqueUserInfo") String uniqueUserInfo) {
         boolean isMemberExists = memberService.isDuplicateUser(uniqueUserInfo);
 
         return ResponseEntity.ok(isMemberExists);
     }
+
 
     @Operation(summary = "Get MemberInfo", description = "Get member's information by uniqueUserInfo")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Member information retrieved successfully")
     })
     @GetMapping("/getMemberInfo")
-    public ResponseEntity<MemberInfoUpdateResponse> getMemberInfo(@RequestHeader(name = "Authorization") String authorizationHeader) {
-        // JWT 토큰 검증
-        Claims claims = tokenValidator.validateToken(authorizationHeader.replace("Bearer ", ""));
-        String uniqueUserInfo = claims.get("uniqueUserInfo", String.class);
-
+    public ResponseEntity<MemberInfoUpdateResponse> getMemberInfo(@RequestParam("uniqueUserInfo") String uniqueUserInfo) {
         Member member = memberService.findByUniqueUserInfo(uniqueUserInfo);
 
         try {
+
             MemberInfoUpdateResponse memberInfoResponse = MemberInfoUpdateResponse.builder()
                     .transactionTime(LocalDateTime.now().toString())
                     .status(HttpStatus.OK.toString())
@@ -163,11 +157,17 @@ public class MemberInfoController {
                     .mbti(member.getMbti())
                     .build();
 
+
             return ResponseEntity.ok(memberInfoResponse);
-        } catch (BadRequestException | UserNotFoundException e) {
+        } catch (BadRequestException e) {
+            throw e;
+        } catch (UserNotFoundException e) {
             throw e;
         }
     }
 
 
+
+
 }
+
