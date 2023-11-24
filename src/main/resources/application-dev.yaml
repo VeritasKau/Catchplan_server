@@ -4,6 +4,7 @@ spring:
     username: ${rds.username}
     password: ${rds.password}
     driver-class-name: ${rds.driver}
+
   cloud:
     aws:
       s3:
