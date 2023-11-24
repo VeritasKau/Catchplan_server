@@ -4,6 +4,7 @@ package Sanhak.wakeUp.team.small_event.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @ToString
 @Getter
@@ -25,7 +26,8 @@ public class SmallEvent {
     private String url;
     private String detail;
     private String detail2;
-    private Integer status;
+    private Boolean status;
+
 
     public SmallEvent(String image, String text, String place, String duration, String url, String detail, String detail2) {
         this.image=image;
@@ -35,6 +37,6 @@ public class SmallEvent {
         this.url=url;
         this.detail=detail;
         this.detail2=detail2;
-        this.status=1;
+        this.status=Boolean.TRUE;
     }
 }

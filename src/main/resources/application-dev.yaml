@@ -4,7 +4,18 @@ spring:
     username: ${rds.username}
     password: ${rds.password}
     driver-class-name: ${rds.driver}
-
+  cloud:
+    aws:
+      s3:
+        bucket: catchplanbucket
+      credentials:
+        access-key: AKIAVDQOA2F7SGUIGN7H
+        secret-key: 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
+      region:
+        static: ap-northeast-2
+        auto: false
+      stack:
+        auto: false
 
   jpa:
     hibernate:

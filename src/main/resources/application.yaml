@@ -1,17 +1,28 @@
 spring:
-
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Seoul
-    username: root
-    password: tkfkdgkf123!
-
-#   서버올릴땐 밑에 걸로
+  cloud:
+    aws:
+      s3:
+        bucket: catchplanbucket
+      credentials:
+        access-key: AKIAVDQOA2F7SGUIGN7H
+        secret-key: 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
+      region:
+        static: ap-northeast-2
+        auto: false
+      stack:
+        auto: false
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
 #    url: jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Seoul
 #    username: root
-#    password: llgy88388!
+#    password: tkfkdgkf123!
+
+#   서버올릴땐 밑에 걸로
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Seoul
+    username: root
+    password: llgy88388!
 
   jpa:
     hibernate:
@@ -33,6 +44,7 @@ token:
   remote:
     server:
       url: http://catchplan-env.eba-ngqypwbe.ap-northeast-2.elasticbeanstalk.com
+
 
 springdoc:
   api-docs:

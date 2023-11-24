@@ -18,10 +18,10 @@ public class SmallEventResponse {
     private String url;
     private String detail;
     private String detail2;
-    private Integer status;
+    private Boolean status;
 
     public static SmallEventResponse of(Long id,String image,String text,String place,String duration
-            ,String url,String detail,String detail2,Integer status){
+            ,String url,String detail,String detail2,Boolean status){
         return SmallEventResponse.builder()
                 .id(id)
                 .image(image)
