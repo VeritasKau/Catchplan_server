@@ -103,5 +103,9 @@ public class SmallEventController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+<<<<<<< HEAD
 
 }
+=======
+}
+>>>>>>> 665d37c0966f9bfacfe62c9304462ffa66a1eccc

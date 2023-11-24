@@ -40,16 +40,7 @@ public class MemberInfoController {
     }
 
 
-    @Operation(summary = "Check MemberInfo", description = "Check a MemberInfo.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Member checked successfully"),
-    })
-    @GetMapping("/checkMember")
-    public ResponseEntity<Boolean> checkMember(@RequestParam("uniqueUserInfo") String uniqueUserInfo) {
-        boolean isMemberExists = memberService.isDuplicateUser(uniqueUserInfo);
 
-        return ResponseEntity.ok(isMemberExists);
-    }
 
     @Operation(summary = "Update MemberInfo", description = "Update a MemberInfo.")
     @ApiResponses(value = {
@@ -100,6 +91,8 @@ public class MemberInfoController {
 
     }
 
+
+
     @Operation(summary = "Delete Member", description = "Delete a member's account.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Member deleted successfully"),
@@ -128,6 +121,19 @@ public class MemberInfoController {
             throw e;
         }
     }
+
+    @Operation(summary = "Check MemberInfo", description = "Check a MemberInfo.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Member checked successfully"),
+    })
+    @GetMapping("/checkMember")
+    public ResponseEntity<Boolean> checkMember(@RequestParam("uniqueUserInfo") String uniqueUserInfo) {
+        boolean isMemberExists = memberService.isDuplicateUser(uniqueUserInfo);
+
+        return ResponseEntity.ok(isMemberExists);
+    }
+
+
     @Operation(summary = "Get MemberInfo", description = "Get member's information by uniqueUserInfo")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Member information retrieved successfully")
@@ -149,7 +155,7 @@ public class MemberInfoController {
                     .genre2(member.getGenre2())
                     .genre3(member.getGenre3())
                     .mbti(member.getMbti())
-              .build();
+                    .build();
 
 
             return ResponseEntity.ok(memberInfoResponse);
@@ -164,3 +170,4 @@ public class MemberInfoController {
 
 
 }
+

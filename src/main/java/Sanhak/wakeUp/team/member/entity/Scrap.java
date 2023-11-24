@@ -22,5 +22,21 @@ public class Scrap extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     private Event event;
-}
 
+    // scrapdb에 이벤트 및 멤버 정보를 저장할 추가 필드
+
+    private String eventImage;
+    private String eventText;
+    private String eventPlace;
+    private String eventDuration;
+    private String eventDetail;
+    private String eventUrl;
+    private String eventDtype;
+
+    private String memberGenre1;
+    private String memberGenre2;
+    private String memberGenre3;
+    private String memberMbti;
+
+
+}
