@@ -23,44 +23,54 @@ public class SmallEventService {
 
     //small event생성하기
     @Transactional
-    public void createSmallEvent(SmallEventRequest smallEventRequest, MultipartFile image, MultipartFile detail1) throws IOException {
-        // 이미지를 base64로 인코딩
-        byte[] base64Image = encodeFileToBase64(image);
-
-        // 이미지를 S3에 업로드하고 경로를 얻어옴
-        String imagePath = s3UploadService.saveFile(image);
-
-        // 상세 이미지도 동일하게 처리
-        byte[] base64Detail = (detail1 != null && !detail1.isEmpty()) ? encodeFileToBase64(detail1) : null;
-        String detailPath = (detail1 != null && !detail1.isEmpty()) ? s3UploadService.saveFile(detail1) : null;
+    public SmallEventResponse createSmallEvent(SmallEventRequest smallEventRequest) throws IOException {
+        // 이미지를 Base64로 인코딩하여 문자열로 저장
+        String base64Image = Base64.getEncoder().encodeToString(smallEventRequest.getImage().getBytes());
+        String base64Detail = null;
+        if (smallEventRequest.getDetail() != null && !smallEventRequest.getDetail().isEmpty()) {
+            base64Detail = Base64.getEncoder().encodeToString(smallEventRequest.getDetail().getBytes());
+        }
 
         // 나머지 로직은 변경하지 않음
 
         Long duration;
         try {
-            duration = Long.parseLong(String.valueOf(smallEventRequest.getDuration()));
+            duration = Long.parseLong(smallEventRequest.getDuration());
         } catch (NumberFormatException e) {
             System.out.println("여기에러");
             duration = null; // or set a default value, depending on your requirements
         }
 
         SmallEvent newSmallEvent = SmallEvent.builder()
-                .image(Arrays.toString(base64Image))
+                .image(base64Image) // 문자열로 저장
                 .text(smallEventRequest.getText())
                 .place(smallEventRequest.getPlace())
                 .duration(String.valueOf(duration))
                 .url(smallEventRequest.getUrl())
-                .detail(Arrays.toString(base64Detail))
+                .detail(base64Detail)
                 .detail2(smallEventRequest.getDetail2())
                 .status(true)
                 .build();
 
-        smallEventRepository.save(newSmallEvent);
+        SmallEvent savedEvent = smallEventRepository.save(newSmallEvent);
+
+        // URL 얻어오는 로직 추가
+        String imageUrl = Objects.requireNonNull(s3UploadService.downloadImage(savedEvent.getImage()).getBody()).getURL().toString();
+        String detailUrl = Objects.requireNonNull(s3UploadService.downloadImage(savedEvent.getDetail()).getBody()).getURL().toString();
+
+        return SmallEventResponse.of(
+                savedEvent.getId(),
+                imageUrl,
+                savedEvent.getText(),
+                savedEvent.getPlace(),
+                savedEvent.getDuration(),
+                savedEvent.getUrl(),
+                detailUrl,
+                savedEvent.getDetail2(),
+                savedEvent.getStatus()
+        );
     }
 
-    private byte[] encodeFileToBase64(MultipartFile file) throws IOException {
-        return file.getBytes();
-    }
 
 
 

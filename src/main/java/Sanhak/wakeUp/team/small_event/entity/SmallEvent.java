@@ -19,13 +19,13 @@ public class SmallEvent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "small_event_id")
     private Long id;
-    @Column(name = "image", columnDefinition = "LONGTEXT")
+    @Column(length = 1000000)
     private String image;
     private String text;
     private String place;
     private String duration;
     private String url;
-    @Column(name = "detail", columnDefinition = "LONGTEXT")
+    @Column(length = 1000000)
     private String detail;
     private String detail2;
     private Boolean status;

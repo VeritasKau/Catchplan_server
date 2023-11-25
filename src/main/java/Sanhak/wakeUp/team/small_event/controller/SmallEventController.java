@@ -30,15 +30,21 @@ public class SmallEventController {
     public ResponseEntity<String> createSmallEvent(
             @ModelAttribute SmallEventRequest smallEventRequest,
             @RequestPart MultipartFile image,
-            @RequestPart MultipartFile detail1
+            @RequestPart MultipartFile detail
     ) {
         try {
-            smallEventService.createSmallEvent(smallEventRequest, image, detail1);
+            // Set the MultipartFile fields in the SmallEventRequest
+            smallEventRequest.setImage(image);
+            smallEventRequest.setDetail(detail);
+
+            smallEventService.createSmallEvent(smallEventRequest);
             return new ResponseEntity<>("OK", HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace(); // Handle the exception appropriately, e.g., log it
             return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
 
     //모든 small event 조회 api

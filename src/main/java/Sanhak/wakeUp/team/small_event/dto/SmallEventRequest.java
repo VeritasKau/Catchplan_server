@@ -1,6 +1,7 @@
 package Sanhak.wakeUp.team.small_event.dto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class SmallEventRequest {
@@ -9,8 +10,8 @@ public class SmallEventRequest {
     private String duration;
     private String url;
     private String detail2;
-    //private String image;
-    //private String detail;
+    private MultipartFile image;
+    private MultipartFile detail;
 
 //    public String getImage() {
 //        return null;
