@@ -7,14 +7,12 @@ import Sanhak.wakeUp.team.small_event.repository.SmallEventRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Base64Util;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -26,34 +24,45 @@ public class SmallEventService {
     //small event생성하기
     @Transactional
     public void createSmallEvent(SmallEventRequest smallEventRequest, MultipartFile image, MultipartFile detail1) throws IOException {
-        String base64Image = Base64.getEncoder().encodeToString(image.getBytes());
-        String base64Detail = (detail1 != null && !detail1.isEmpty()) ? Base64.getEncoder().encodeToString(detail1.getBytes()) : null;
+        // 이미지를 base64로 인코딩
+        String base64Image = encodeFileToBase64(image);
+
+        // 이미지를 S3에 업로드하고 경로를 얻어옴
         String imagePath = s3UploadService.saveFile(image);
+
+        // 상세 이미지도 동일하게 처리
+        String base64Detail = (detail1 != null && !detail1.isEmpty()) ? encodeFileToBase64(detail1) : null;
         String detailPath = (detail1 != null && !detail1.isEmpty()) ? s3UploadService.saveFile(detail1) : null;
+
+        // 나머지 로직은 변경하지 않음
 
         Long duration;
         try {
-            // Try to parse the duration as Long
             duration = Long.parseLong(smallEventRequest.getDuration());
         } catch (NumberFormatException e) {
             System.out.println("여기에러");
-            // Handle the case where the duration is not a valid Long
             duration = null; // or set a default value, depending on your requirements
         }
 
         SmallEvent newSmallEvent = SmallEvent.builder()
-                .image(base64Image)
+                .image(imagePath)
                 .text(smallEventRequest.getText())
                 .place(smallEventRequest.getPlace())
                 .duration(String.valueOf(duration))
                 .url(smallEventRequest.getUrl())
-                .detail(base64Detail)
+                .detail(detailPath)
                 .detail2(smallEventRequest.getDetail2())
                 .status(true)
                 .build();
 
         smallEventRepository.save(newSmallEvent);
     }
+    private String encodeFileToBase64(MultipartFile file) throws IOException {
+        byte[] bytes = file.getBytes();
+        byte[] encodedBytes = Base64Util.encode(Arrays.toString(bytes)).getBytes();
+        return new String(encodedBytes, StandardCharsets.UTF_8);
+    }
+
 
 
     //모든 smallevent 가져오기
