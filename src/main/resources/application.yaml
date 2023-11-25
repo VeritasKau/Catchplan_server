@@ -11,6 +11,10 @@ spring:
         auto: false
       stack:
         auto: false
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
 #    url: jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Seoul

@@ -26,7 +26,8 @@ public class SmallEventService {
     @Transactional
     public void createSmallEvent(SmallEventRequest smallEventRequest, MultipartFile image, MultipartFile detail1) throws IOException {
         String imagePath = s3UploadService.saveFile(image);
-        String detailPath = s3UploadService.saveFile(detail1);
+        String detailPath = (detail1 != null && !detail1.isEmpty()) ? s3UploadService.saveFile(detail1) : null;
+
 
         SmallEvent newSmallEvent = SmallEvent.builder()
                 .image(imagePath)
