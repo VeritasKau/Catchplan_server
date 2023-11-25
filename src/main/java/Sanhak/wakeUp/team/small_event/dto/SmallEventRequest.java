@@ -6,7 +6,7 @@ import lombok.Data;
 public class SmallEventRequest {
     private String text;
     private String place;
-    private String duration;
+    private Long duration;
     private String url;
     private String detail2;
     //private String image;
