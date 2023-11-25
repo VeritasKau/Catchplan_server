@@ -19,17 +19,19 @@ public class SmallEvent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "small_event_id")
     private Long id;
-    private Long image;
+    @Column(name = "image", columnDefinition = "LONGTEXT")
+    private String image;
     private String text;
     private String place;
-    private Long duration;
+    private String duration;
     private String url;
-    private Long detail;
+    @Column(name = "detail", columnDefinition = "LONGTEXT")
+    private String detail;
     private String detail2;
     private Boolean status;
 
 
-    public SmallEvent(Long image, String text, String place, Long duration, String url, Long detail, String detail2) {
+    public SmallEvent(String image, String text, String place, String duration, String url, String detail, String detail2) {
         this.image=image;
         this.text=text;
         this.place=place;
@@ -39,4 +41,5 @@ public class SmallEvent {
         this.detail2=detail2;
         this.status=Boolean.TRUE;
     }
+
 }

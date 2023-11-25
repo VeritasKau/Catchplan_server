@@ -11,17 +11,17 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SmallEventResponse {
     private Long id;
-    private Long image;
+    private String image;
     private String text;
     private String place;
-    private Long duration;
+    private String duration;
     private String url;
-    private Long detail;
+    private String detail;
     private String detail2;
     private Boolean status;
 
-    public static SmallEventResponse of(Long id,Long image,String text,String place,Long duration
-            ,String url,Long detail,String detail2,Boolean status){
+    public static SmallEventResponse of(Long id,String image,String text,String place,String duration
+            ,String url,String detail,String detail2,Boolean status){
         return SmallEventResponse.builder()
                 .id(id)
                 .image(image)

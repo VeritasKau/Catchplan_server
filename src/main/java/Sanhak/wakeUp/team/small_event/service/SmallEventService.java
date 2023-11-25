@@ -25,14 +25,13 @@ public class SmallEventService {
     @Transactional
     public void createSmallEvent(SmallEventRequest smallEventRequest, MultipartFile image, MultipartFile detail1) throws IOException {
         // 이미지를 base64로 인코딩
-
-        Long base64Image = Long.valueOf(encodeFileToBase64(image));
+        byte[] base64Image = encodeFileToBase64(image);
 
         // 이미지를 S3에 업로드하고 경로를 얻어옴
-        //Long imagePath = s3UploadService.saveFile(image);
+        String imagePath = s3UploadService.saveFile(image);
 
         // 상세 이미지도 동일하게 처리
-        Long base64Detail = (detail1 != null && !detail1.isEmpty()) ? Long.valueOf(encodeFileToBase64(detail1)) : null;
+        byte[] base64Detail = (detail1 != null && !detail1.isEmpty()) ? encodeFileToBase64(detail1) : null;
         String detailPath = (detail1 != null && !detail1.isEmpty()) ? s3UploadService.saveFile(detail1) : null;
 
         // 나머지 로직은 변경하지 않음
@@ -46,23 +45,24 @@ public class SmallEventService {
         }
 
         SmallEvent newSmallEvent = SmallEvent.builder()
-                .image(base64Image)
+                .image(Arrays.toString(base64Image))
                 .text(smallEventRequest.getText())
                 .place(smallEventRequest.getPlace())
-                .duration(duration)
+                .duration(String.valueOf(duration))
                 .url(smallEventRequest.getUrl())
-                .detail(base64Detail)
+                .detail(Arrays.toString(base64Detail))
                 .detail2(smallEventRequest.getDetail2())
                 .status(true)
                 .build();
 
         smallEventRepository.save(newSmallEvent);
     }
-    private String encodeFileToBase64(MultipartFile file) throws IOException {
-        byte[] bytes = file.getBytes();
-        byte[] encodedBytes = Base64Util.encode(Arrays.toString(bytes)).getBytes();
-        return new String(encodedBytes, StandardCharsets.UTF_8);
+
+    private byte[] encodeFileToBase64(MultipartFile file) throws IOException {
+        return file.getBytes();
     }
+
+
 
 
 
@@ -73,8 +73,8 @@ public class SmallEventService {
         List<SmallEventResponse> smallEventResponses = new ArrayList<>();
 
         for (SmallEvent smallEvent : smallevents) {
-            Long imageUrl = Long.valueOf(Objects.requireNonNull(s3UploadService.downloadImage(String.valueOf(smallEvent.getImage())).getBody()).getURL().toString());
-            Long detail1Url = Long.valueOf(Objects.requireNonNull(s3UploadService.downloadImage(String.valueOf(smallEvent.getDetail())).getBody()).getURL().toString());
+            String imageUrl = Objects.requireNonNull(s3UploadService.downloadImage(smallEvent.getImage()).getBody()).getURL().toString();
+            String detail1Url = Objects.requireNonNull(s3UploadService.downloadImage(smallEvent.getDetail()).getBody()).getURL().toString();
 
             SmallEventResponse smallEventResponse = SmallEventResponse.of(
                     smallEvent.getId(),
@@ -99,8 +99,8 @@ public class SmallEventService {
                 .orElseThrow(() -> new EntityNotFoundException("이벤트를 찾을수가 없습니다. Id: " + id));
 
         // Move the lines below to after obtaining a non-null SmallEvent instance
-        Long imageUrl = Long.valueOf(Objects.requireNonNull(s3UploadService.downloadImage(String.valueOf(smallEvent.getImage())).getBody()).getURL().toString());
-        Long detail1Url = Long.valueOf(Objects.requireNonNull(s3UploadService.downloadImage(String.valueOf(smallEvent.getDetail())).getBody()).getURL().toString());
+        String imageUrl = Objects.requireNonNull(s3UploadService.downloadImage(smallEvent.getImage()).getBody()).getURL().toString();
+        String detail1Url = Objects.requireNonNull(s3UploadService.downloadImage(smallEvent.getDetail()).getBody()).getURL().toString();
 
         return SmallEventResponse.of(
                 smallEvent.getId(),
@@ -123,8 +123,8 @@ public class SmallEventService {
         List<SmallEventResponse> smallEventResponses = new ArrayList<>();
 
         for (SmallEvent smallEvent : smallEvents) {
-            Long imageUrl = Long.valueOf(Objects.requireNonNull(s3UploadService.downloadImage(String.valueOf(smallEvent.getImage())).getBody()).getURL().toString());
-            Long detail1Url = Long.valueOf(Objects.requireNonNull(s3UploadService.downloadImage(String.valueOf(smallEvent.getDetail())).getBody()).getURL().toString());
+            String imageUrl = Objects.requireNonNull(s3UploadService.downloadImage(smallEvent.getImage()).getBody()).getURL().toString();
+            String detail1Url = Objects.requireNonNull(s3UploadService.downloadImage(smallEvent.getDetail()).getBody()).getURL().toString();
             SmallEventResponse smallEventResponse = SmallEventResponse.of(
                     smallEvent.getId(),
                     imageUrl,
@@ -154,12 +154,12 @@ public class SmallEventService {
         //String newDetailPath = s3UploadService.saveFile(detail1);
 
         //smallEvent.setImage(image);
-        smallEvent.setImage(Long.valueOf(image.getOriginalFilename()));
+        smallEvent.setImage(image.getOriginalFilename());
         smallEvent.setText(smallEventRequest.getText());
         smallEvent.setPlace(smallEventRequest.getPlace());
         smallEvent.setDuration(smallEventRequest.getDuration());
         smallEvent.setUrl(smallEventRequest.getUrl());
-        smallEvent.setDetail(Long.valueOf(detail1.getOriginalFilename()));
+        smallEvent.setDetail(detail1.getOriginalFilename());
         smallEvent.setDetail2(smallEventRequest.getDetail2());
 
         // Save the updated smallEvent
@@ -185,11 +185,11 @@ public class SmallEventService {
         SmallEvent smallEvent = smallEventRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다.Id: " + id));
 
-        Long imageUrl = Long.valueOf(s3UploadService.downloadImage(String.valueOf(smallEvent.getImage())).getBody().getURL().toString());
-        Long detail1Url = Long.valueOf(s3UploadService.downloadImage(String.valueOf(smallEvent.getDetail())).getBody().getURL().toString());
+        String imageUrl = s3UploadService.downloadImage(smallEvent.getImage()).getBody().getURL().toString();
+        String detail1Url = s3UploadService.downloadImage(smallEvent.getDetail()).getBody().getURL().toString();
 
-        s3UploadService.deleteImage(String.valueOf(Long.valueOf(smallEvent.getImage())));
-        s3UploadService.deleteImage(String.valueOf(smallEvent.getDetail()));
+        s3UploadService.deleteImage(smallEvent.getImage());
+        s3UploadService.deleteImage(smallEvent.getDetail());
 
         smallEventRepository.delete(smallEvent);
         return SmallEventResponse.of(
