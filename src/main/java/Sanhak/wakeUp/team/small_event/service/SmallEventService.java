@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,17 +26,28 @@ public class SmallEventService {
     //small event생성하기
     @Transactional
     public void createSmallEvent(SmallEventRequest smallEventRequest, MultipartFile image, MultipartFile detail1) throws IOException {
+        String base64Image = Base64.getEncoder().encodeToString(image.getBytes());
+        String base64Detail = (detail1 != null && !detail1.isEmpty()) ? Base64.getEncoder().encodeToString(detail1.getBytes()) : null;
         String imagePath = s3UploadService.saveFile(image);
         String detailPath = (detail1 != null && !detail1.isEmpty()) ? s3UploadService.saveFile(detail1) : null;
 
+        Long duration;
+        try {
+            // Try to parse the duration as Long
+            duration = Long.parseLong(smallEventRequest.getDuration());
+        } catch (NumberFormatException e) {
+            System.out.println("여기에러");
+            // Handle the case where the duration is not a valid Long
+            duration = null; // or set a default value, depending on your requirements
+        }
 
         SmallEvent newSmallEvent = SmallEvent.builder()
-                .image(imagePath)
+                .image(base64Image)
                 .text(smallEventRequest.getText())
                 .place(smallEventRequest.getPlace())
-                .duration(smallEventRequest.getDuration())
+                .duration(String.valueOf(duration))
                 .url(smallEventRequest.getUrl())
-                .detail(detailPath)
+                .detail(base64Detail)
                 .detail2(smallEventRequest.getDetail2())
                 .status(true)
                 .build();
