@@ -11,8 +11,12 @@ import org.apache.logging.log4j.util.Base64Util;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+
+import static javax.management.ObjectName.unquote;
 
 @Service
 @RequiredArgsConstructor
@@ -23,13 +27,16 @@ public class SmallEventService {
 
     //small event생성하기
     @Transactional
-    public SmallEventResponse createSmallEvent(SmallEventRequest smallEventRequest) throws IOException {
-        // 이미지를 Base64로 인코딩하여 문자열로 저장
-        String base64Image = Base64.getEncoder().encodeToString(smallEventRequest.getImage().getBytes());
-        String base64Detail = null;
-        if (smallEventRequest.getDetail() != null && !smallEventRequest.getDetail().isEmpty()) {
-            base64Detail = Base64.getEncoder().encodeToString(smallEventRequest.getDetail().getBytes());
-        }
+    public void createSmallEvent(SmallEventRequest smallEventRequest, MultipartFile image, MultipartFile detail1) throws IOException {
+        // 이미지를 base64로 인코딩
+        String base64Image = encodeFileToBase64(image);
+
+        // 이미지를 S3에 업로드하고 경로를 얻어옴
+        String imagePath = s3UploadService.saveFile(image);
+
+        // 상세 이미지도 동일하게 처리
+        String base64Detail = (detail1 != null && !detail1.isEmpty()) ? encodeFileToBase64(detail1) : null;
+        String detailPath = (detail1 != null && !detail1.isEmpty()) ? s3UploadService.saveFile(detail1) : null;
 
         // 나머지 로직은 변경하지 않음
 
@@ -42,62 +49,70 @@ public class SmallEventService {
         }
 
         SmallEvent newSmallEvent = SmallEvent.builder()
-                .image(base64Image) // 문자열로 저장
+                .image(imagePath)
                 .text(smallEventRequest.getText())
                 .place(smallEventRequest.getPlace())
                 .duration(String.valueOf(duration))
                 .url(smallEventRequest.getUrl())
-                .detail(base64Detail)
+                .detail(detailPath)
                 .detail2(smallEventRequest.getDetail2())
                 .status(true)
                 .build();
 
-        SmallEvent savedEvent = smallEventRepository.save(newSmallEvent);
-
-        // URL 얻어오는 로직 추가
-        String imageUrl = Objects.requireNonNull(s3UploadService.downloadImage(savedEvent.getImage()).getBody()).getURL().toString();
-        String detailUrl = Objects.requireNonNull(s3UploadService.downloadImage(savedEvent.getDetail()).getBody()).getURL().toString();
-
-        return SmallEventResponse.of(
-                savedEvent.getId(),
-                imageUrl,
-                savedEvent.getText(),
-                savedEvent.getPlace(),
-                savedEvent.getDuration(),
-                savedEvent.getUrl(),
-                detailUrl,
-                savedEvent.getDetail2(),
-                savedEvent.getStatus()
-        );
+        smallEventRepository.save(newSmallEvent);
     }
-
-
-
+    private String encodeFileToBase64(MultipartFile file) throws IOException {
+        byte[] bytes = file.getBytes();
+        byte[] encodedBytes = Base64Util.encode(Arrays.toString(bytes)).getBytes();
+        return new String(encodedBytes, StandardCharsets.UTF_8);
+    }
 
 
 
     //모든 smallevent 가져오기
     @Transactional
     public List<SmallEventResponse> getAllSmallEvents() {
-        List<SmallEvent> smallevents = smallEventRepository.findAll();
+        List<SmallEvent> smallEvents = smallEventRepository.findAll();
         List<SmallEventResponse> smallEventResponses = new ArrayList<>();
 
-        for (SmallEvent smallEvent : smallevents) {
-            String imageUrl = Objects.requireNonNull(s3UploadService.downloadImage(smallEvent.getImage()).getBody()).getURL().toString();
-            String detail1Url = Objects.requireNonNull(s3UploadService.downloadImage(smallEvent.getDetail()).getBody()).getURL().toString();
+        for (SmallEvent smallEvent : smallEvents) {
+            try {
+                // Download image and get URL as String
+                String imageUrl = Objects.requireNonNull(
+                        s3UploadService.downloadImage(smallEvent.getImage()).getBody().getURL().toString()
+                );
 
-            SmallEventResponse smallEventResponse = SmallEventResponse.of(
-                    smallEvent.getId(),
-                    imageUrl,
-                    smallEvent.getText(),
-                    smallEvent.getPlace(),
-                    smallEvent.getDuration(),
-                    smallEvent.getUrl(),
-                    detail1Url,
-                    smallEvent.getDetail2(),
-                    smallEvent.getStatus()
-            );
-            smallEventResponses.add(smallEventResponse);
+                // Decode URL
+                String decodedUrl = URLDecoder.decode(imageUrl, StandardCharsets.UTF_8.toString());
+
+                // Remove "%25" from URL
+                String cleanedUrl = decodedUrl.replace("%25", "");
+                String cleanedUrl2= cleanedUrl.replace("https://catchplan.s3.ap-northeast-2.amazonaws.com/https://catchplan.s3.ap-northeast-2.amazonaws.com/", "https://catchplan.s3.ap-northeast-2.amazonaws.com/");
+                // Similarly process detail1Url as needed
+                String detail1Url = Objects.requireNonNull(s3UploadService.downloadImage(smallEvent.getDetail()).getBody()).getURL().toString();
+                String decodedDetailUrl = URLDecoder.decode(detail1Url, StandardCharsets.UTF_8.toString());
+                String cleanedDetailUrl = decodedDetailUrl.replace("%25", "");
+                String cleanedDetailUrl2= cleanedDetailUrl.replace("https://catchplan.s3.ap-northeast-2.amazonaws.com/https://catchplan.s3.ap-northeast-2.amazonaws.com/", "https://catchplan.s3.ap-northeast-2.amazonaws.com/");
+
+
+                // Create SmallEventResponse and add to the list
+                SmallEventResponse smallEventResponse = SmallEventResponse.of(
+                        smallEvent.getId(),
+                        cleanedUrl2,
+                        smallEvent.getText(),
+                        smallEvent.getPlace(),
+                        smallEvent.getDuration(),
+                        smallEvent.getUrl(),
+                        cleanedDetailUrl2,
+                        smallEvent.getDetail2(),
+                        smallEvent.getStatus()
+                );
+                smallEventResponses.add(smallEventResponse);
+
+            } catch (Exception e) {
+                // Handle exceptions appropriately
+                e.printStackTrace();
+            }
         }
         return smallEventResponses;
     }
@@ -108,23 +123,8 @@ public class SmallEventService {
         SmallEvent smallEvent = smallEventRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("이벤트를 찾을수가 없습니다. Id: " + id));
 
-        // Move the lines below to after obtaining a non-null SmallEvent instance
-        String imageUrl = Objects.requireNonNull(s3UploadService.downloadImage(smallEvent.getImage()).getBody()).getURL().toString();
-        String detail1Url = Objects.requireNonNull(s3UploadService.downloadImage(smallEvent.getDetail()).getBody()).getURL().toString();
-
-        return SmallEventResponse.of(
-                smallEvent.getId(),
-                imageUrl,
-                smallEvent.getText(),
-                smallEvent.getPlace(),
-                smallEvent.getDuration(),
-                smallEvent.getUrl(),
-                detail1Url,
-                smallEvent.getDetail2(),
-                smallEvent.getStatus()
-        );
+        return createSmallEventResponse(smallEvent);
     }
-
 
     //제목으로 event검색해주기
     @Transactional
@@ -133,9 +133,19 @@ public class SmallEventService {
         List<SmallEventResponse> smallEventResponses = new ArrayList<>();
 
         for (SmallEvent smallEvent : smallEvents) {
-            String imageUrl = Objects.requireNonNull(s3UploadService.downloadImage(smallEvent.getImage()).getBody()).getURL().toString();
-            String detail1Url = Objects.requireNonNull(s3UploadService.downloadImage(smallEvent.getDetail()).getBody()).getURL().toString();
-            SmallEventResponse smallEventResponse = SmallEventResponse.of(
+            SmallEventResponse smallEventResponse = createSmallEventResponse(smallEvent);
+            smallEventResponses.add(smallEventResponse);
+        }
+
+        return smallEventResponses;
+    }
+
+    private SmallEventResponse createSmallEventResponse(SmallEvent smallEvent) {
+        try {
+            String imageUrl = getImageUrl(smallEvent.getImage());
+            String detail1Url = getImageUrl(smallEvent.getDetail());
+
+            return SmallEventResponse.of(
                     smallEvent.getId(),
                     imageUrl,
                     smallEvent.getText(),
@@ -146,30 +156,42 @@ public class SmallEventService {
                     smallEvent.getDetail2(),
                     smallEvent.getStatus()
             );
-            smallEventResponses.add(smallEventResponse);
+        } catch (Exception e) {
+            // Handle exceptions appropriately
+            e.printStackTrace();
+            return null; // Or throw a specific exception indicating failure
         }
-        return smallEventResponses;
     }
+
+    private String getImageUrl(String image) throws UnsupportedEncodingException {
+        String imageUrl = Objects.requireNonNull(s3UploadService.downloadImage(image).getBody().getURL().toString());
+        String decodedUrl = URLDecoder.decode(imageUrl, StandardCharsets.UTF_8.toString());
+        String cleanedUrl = decodedUrl.replace("%25", "").replace("https://catchplan.s3.ap-northeast-2.amazonaws.com/https://catchplan.s3.ap-northeast-2.amazonaws.com/", "https://catchplan.s3.ap-northeast-2.amazonaws.com/");
+        return cleanedUrl;
+    }
+
+
+
 
 
     //small event 수정(update)
     //먼가 기존 수정파일을 불러와서 교체를 하고싶은데 나는  우리 LMS처럼 들어가면 원래 내가 쓴정보가 있어서 그정보에서 수정할수있는 그런느낌
     @Transactional
-    public SmallEventResponse editSmallEvent(SmallEventRequest smallEventRequest, Long id, MultipartFile image, MultipartFile detail1) throws IOException {
+    public SmallEventResponse editSmallEvent(SmallEventRequest smallEventRequest, Long id, MultipartFile image, MultipartFile detail) throws IOException {
         SmallEvent smallEvent = smallEventRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("이벤트를 찾을 수 없습니다. Id: " + id));
 
 
-        //String newImagePath = s3UploadService.saveFile(image);
-        //String newDetailPath = s3UploadService.saveFile(detail1);
+        String newImagePath = s3UploadService.saveFile(image);
+        String newDetailPath = s3UploadService.saveFile(detail);
 
         //smallEvent.setImage(image);
-        smallEvent.setImage(image.getOriginalFilename());
+        smallEvent.setImage(newImagePath);
         smallEvent.setText(smallEventRequest.getText());
         smallEvent.setPlace(smallEventRequest.getPlace());
         smallEvent.setDuration(smallEventRequest.getDuration());
         smallEvent.setUrl(smallEventRequest.getUrl());
-        smallEvent.setDetail(detail1.getOriginalFilename());
+        smallEvent.setDetail(newDetailPath);
         smallEvent.setDetail2(smallEventRequest.getDetail2());
 
         // Save the updated smallEvent

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
@@ -37,7 +38,7 @@ public class SmallEventController {
             smallEventRequest.setImage(image);
             smallEventRequest.setDetail(detail);
 
-            smallEventService.createSmallEvent(smallEventRequest);
+            smallEventService.createSmallEvent(smallEventRequest,image,detail);
             return new ResponseEntity<>("OK", HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace(); // Handle the exception appropriately, e.g., log it
@@ -49,7 +50,7 @@ public class SmallEventController {
 
     //모든 small event 조회 api
     @GetMapping("")
-    public List<SmallEventResponse> getAllSmallEvents(){
+    public List<SmallEventResponse> getAllSmallEvents() throws UnsupportedEncodingException {
         return smallEventService.getAllSmallEvents();
     }
 
@@ -80,10 +81,10 @@ public class SmallEventController {
     @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<String> editSmallEvent(@ModelAttribute SmallEventRequest smallEventRequest,
                                                  @RequestPart MultipartFile image,
-                                                 @RequestPart MultipartFile detail1,
+                                                 @RequestPart MultipartFile detail,
                                                  @PathVariable("id")Long id){
         try {
-            SmallEventResponse editSmallEvent = smallEventService.editSmallEvent(smallEventRequest, id,image,detail1);
+            SmallEventResponse editSmallEvent = smallEventService.editSmallEvent(smallEventRequest, id,image,detail);
             if (editSmallEvent != null) {
                 return new ResponseEntity<>("OK", HttpStatus.OK);
             }else{

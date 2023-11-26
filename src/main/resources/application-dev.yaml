@@ -8,10 +8,10 @@ spring:
   cloud:
     aws:
       s3:
-        bucket: catchplanbucket
+        bucket: catchplan
       credentials:
-        access-key: AKIAVDQOA2F7SGUIGN7H
-        secret-key: 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
+        access-key: AKIAVDQOA2F7XHDB7T4R
+        secret-key: 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
       region:
         static: ap-northeast-2
         auto: false
