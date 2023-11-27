@@ -91,12 +91,12 @@ public class SmallEventService {
                 SmallEventResponse smallEventResponse = SmallEventResponse.of(
                         smallEvent.getId(),
                         //imageUrl,
-                        cleanedUrl,
+                        cleanedUrl.toString(),
                         smallEvent.getText(),
                         smallEvent.getPlace(),
                         smallEvent.getDuration(),
                         smallEvent.getUrl(),
-                        cleanedDetailUrl,
+                        cleanedDetailUrl.toString(),
                         //detail1Url,
                         smallEvent.getDetail2(),
                         smallEvent.getStatus()
@@ -142,12 +142,12 @@ public class SmallEventService {
 
             return SmallEventResponse.of(
                     smallEvent.getId(),
-                    imageUrl,
+                    imageUrl.toString(),
                     smallEvent.getText(),
                     smallEvent.getPlace(),
                     smallEvent.getDuration(),
                     smallEvent.getUrl(),
-                    detail1Url,
+                    detail1Url.toString(),
                     smallEvent.getDetail2(),
                     smallEvent.getStatus()
             );
