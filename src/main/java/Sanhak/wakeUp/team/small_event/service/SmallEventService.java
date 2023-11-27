@@ -39,19 +39,13 @@ public class SmallEventService {
 
         // 나머지 로직은 변경하지 않음
 
-        Long duration;
-        try {
-            duration = Long.parseLong(smallEventRequest.getDuration());
-        } catch (NumberFormatException e) {
-            System.out.println("여기에러");
-            duration = null; // or set a default value, depending on your requirements
-        }
+
 
         SmallEvent newSmallEvent = SmallEvent.builder()
                 .image(imagePath)
                 .text(smallEventRequest.getText())
                 .place(smallEventRequest.getPlace())
-                .duration(String.valueOf(duration))
+                .duration(smallEventRequest.getDuration())
                 .url(smallEventRequest.getUrl())
                 .detail(detailPath)
                 .detail2(smallEventRequest.getDetail2())
@@ -176,23 +170,38 @@ public class SmallEventService {
     //small event 수정(update)
     //먼가 기존 수정파일을 불러와서 교체를 하고싶은데 나는  우리 LMS처럼 들어가면 원래 내가 쓴정보가 있어서 그정보에서 수정할수있는 그런느낌
     @Transactional
-    public SmallEventResponse editSmallEvent(SmallEventRequest smallEventRequest, Long id, MultipartFile image, MultipartFile detail) throws IOException {
+    public SmallEventResponse editSmallEvent(
+            SmallEventRequest smallEventRequest,
+            Long id,
+            MultipartFile image,
+            MultipartFile detail
+    ) throws IOException {
         SmallEvent smallEvent = smallEventRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("이벤트를 찾을 수 없습니다. Id: " + id));
 
+        // 이미지가 필수로 들어가야 함
+        if (image == null || image.isEmpty()) {
+            // 이미지가 없으면 예외 처리 또는 다른 로직을 추가할 수 있음
+            throw new IllegalArgumentException("이미지는 필수 입력 항목입니다.");
+        }
 
         String newImagePath = s3UploadService.saveFile(image);
-        String newDetailPath = s3UploadService.saveFile(detail);
 
+        // 디테일이 제공되면 업데이트
+        if (detail != null && !detail.isEmpty()) {
+            String newDetailPath = s3UploadService.saveFile(detail);
+            smallEvent.setDetail(newDetailPath);
+        }
+
+        // 나머지 필드 업데이트
         smallEvent.setImage(newImagePath);
         smallEvent.setText(smallEventRequest.getText());
         smallEvent.setPlace(smallEventRequest.getPlace());
         smallEvent.setDuration(smallEventRequest.getDuration());
         smallEvent.setUrl(smallEventRequest.getUrl());
-        smallEvent.setDetail(newDetailPath);
         smallEvent.setDetail2(smallEventRequest.getDetail2());
 
-        // Save the updated smallEvent
+        // 업데이트된 smallEvent 저장
         smallEventRepository.save(smallEvent);
 
         return SmallEventResponse.of(
@@ -209,6 +218,7 @@ public class SmallEventService {
     }
 
 
+
     //small event삭제
     @Transactional
     public SmallEventResponse deleteSmallEvent(Long id) {
@@ -216,10 +226,14 @@ public class SmallEventService {
                 .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다.Id: " + id));
 
         String imageUrl = s3UploadService.downloadImage(smallEvent.getImage()).getBody().getURL().toString();
-        String detail1Url = s3UploadService.downloadImage(smallEvent.getDetail()).getBody().getURL().toString();
+        String detail1Url = null;
+
+        if (smallEvent.getDetail() != null) {
+            detail1Url = s3UploadService.downloadImage(smallEvent.getDetail()).getBody().getURL().toString();
+            s3UploadService.deleteImage(smallEvent.getDetail());
+        }
 
         s3UploadService.deleteImage(smallEvent.getImage());
-        s3UploadService.deleteImage(smallEvent.getDetail());
 
         smallEventRepository.delete(smallEvent);
         return SmallEventResponse.of(
