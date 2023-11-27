@@ -79,12 +79,12 @@ public class SmallEventService {
                 String decodedUrl = URLDecoder.decode(imageUrl, StandardCharsets.UTF_8.toString());
 
                 // Remove "%25" from URL
-                String cleanedUrl = decodedUrl.replace("https://catchplan.s3.ap-northeast-2.amazonaws.com/https%3A/%2Fcatchplan.s3.ap-northeast-2.amazonaws.com/", "https://catchplan.s3.ap-northeast-2.amazonaws.com/");
+                String cleanedUrl = imageUrl.replace("https://catchplan.s3.ap-northeast-2.amazonaws.com/https%3A/%2Fcatchplan.s3.ap-northeast-2.amazonaws.com/", "https://catchplan.s3.ap-northeast-2.amazonaws.com/");
                 String cleanedUrl2= cleanedUrl.replace("https://catchplan.s3.ap-northeast-2.amazonaws.com/https://catchplan.s3.ap-northeast-2.amazonaws.com/", "https://catchplan.s3.ap-northeast-2.amazonaws.com/");
                 // Similarly process detail1Url as needed
                 String detail1Url = Objects.requireNonNull(s3UploadService.downloadImage(smallEvent.getDetail()).getBody()).getURL().toString();
                 String decodedDetailUrl = URLDecoder.decode(detail1Url, StandardCharsets.UTF_8.toString());
-                String cleanedDetailUrl = decodedDetailUrl.replace("https://catchplan.s3.ap-northeast-2.amazonaws.com/https%3A/%2Fcatchplan.s3.ap-northeast-2.amazonaws.com/", "https://catchplan.s3.ap-northeast-2.amazonaws.com/");
+                String cleanedDetailUrl = detail1Url.replace("https://catchplan.s3.ap-northeast-2.amazonaws.com/https%3A/%2Fcatchplan.s3.ap-northeast-2.amazonaws.com/", "https://catchplan.s3.ap-northeast-2.amazonaws.com/");
                 String cleanedDetailUrl2= cleanedDetailUrl.replace("https://catchplan.s3.ap-northeast-2.amazonaws.com/https://catchplan.s3.ap-northeast-2.amazonaws.com/", "https://catchplan.s3.ap-northeast-2.amazonaws.com/");
 
                 // Create SmallEventResponse and add to the list
@@ -161,7 +161,7 @@ public class SmallEventService {
     private String getImageUrl(String image) throws UnsupportedEncodingException {
         String imageUrl = Objects.requireNonNull(s3UploadService.downloadImage(image).getBody().getURL().toString());
         String decodedUrl = URLDecoder.decode(imageUrl, StandardCharsets.UTF_8.toString());
-        String cleanedUrl = decodedUrl.replace("https://catchplan.s3.ap-northeast-2.amazonaws.com/https%3A/%2Fcatchplan.s3.ap-northeast-2.amazonaws.com/", "https://catchplan.s3.ap-northeast-2.amazonaws.com/");
+        String cleanedUrl = imageUrl.replace("https://catchplan.s3.ap-northeast-2.amazonaws.com/https%3A/%2Fcatchplan.s3.ap-northeast-2.amazonaws.com/", "https://catchplan.s3.ap-northeast-2.amazonaws.com/");
         return cleanedUrl;
     }
 
