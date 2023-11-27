@@ -33,6 +33,7 @@ public class Scrap extends BaseTimeEntity {
     private String eventUrl;
     private String eventDtype;
 
+    private String memberUniqueUserInfo;
     private String memberGenre1;
     private String memberGenre2;
     private String memberGenre3;
