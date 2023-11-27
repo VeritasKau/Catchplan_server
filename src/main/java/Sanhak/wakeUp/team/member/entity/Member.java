@@ -26,7 +26,6 @@ public class Member extends BaseTimeEntity {
 
     @Column(unique = true, length = 50, nullable = false)
     private String uniqueUserInfo;
-
     private String name;
     private String sex;
     private String genre1;

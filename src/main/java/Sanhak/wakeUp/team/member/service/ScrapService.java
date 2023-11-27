@@ -57,6 +57,7 @@ public class ScrapService {
         scrap.setEvent(event);
 
         // 연관된 엔터티에서 정보를 가져와 추가 필드에 설정
+        scrap.setMemberUniqueUserInfo(member.getUniqueUserInfo());
         scrap.setMemberGenre1(member.getGenre1());
         scrap.setMemberGenre2(member.getGenre2());
         scrap.setMemberGenre3(member.getGenre3());
