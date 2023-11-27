@@ -25,7 +25,7 @@ public class SmallEventService {
 
     //small event생성하기
     @Transactional
-    public void createSmallEvent(SmallEventRequest smallEventRequest, MultipartFile image) throws IOException {
+    public void createSmallEvent(SmallEventRequest smallEventRequest, MultipartFile image,MultipartFile detail) throws IOException {
         // 이미지를 base64로 인코딩
         String base64Image = encodeFileToBase64(image);
 
@@ -35,25 +35,25 @@ public class SmallEventService {
         // 상세 이미지도 동일하게 처리
         //String base64Detail = (detail1 != null && !detail1.isEmpty()) ? encodeFileToBase64(detail1) : null;
 
-        //String detailPath = (detail != null && !detail.isEmpty()) ? s3UploadService.saveFile(detail) : null;
+        String detailPath = (detail != null && !detail.isEmpty()) ? s3UploadService.saveFile(detail) : null;
 
         // 나머지 로직은 변경하지 않음
 
-//        Long duration;
-//        try {
-//            duration = Long.parseLong(smallEventRequest.getDuration());
-//        } catch (NumberFormatException e) {
-//            System.out.println("여기에러");
-//            duration = null; // or set a default value, depending on your requirements
-//        }
+        Long duration;
+        try {
+            duration = Long.parseLong(smallEventRequest.getDuration());
+        } catch (NumberFormatException e) {
+            System.out.println("여기에러");
+            duration = null; // or set a default value, depending on your requirements
+        }
 
         SmallEvent newSmallEvent = SmallEvent.builder()
                 .image(imagePath)
                 .text(smallEventRequest.getText())
                 .place(smallEventRequest.getPlace())
-                //.duration(String.valueOf(duration))
+                .duration(String.valueOf(duration))
                 .url(smallEventRequest.getUrl())
-                //.detail(detailPath)
+                .detail(detailPath)
                 .detail2(smallEventRequest.getDetail2())
                 .status(true)
                 .build();
@@ -184,11 +184,10 @@ public class SmallEventService {
         String newImagePath = s3UploadService.saveFile(image);
         String newDetailPath = s3UploadService.saveFile(detail);
 
-        //smallEvent.setImage(image);
         smallEvent.setImage(newImagePath);
         smallEvent.setText(smallEventRequest.getText());
         smallEvent.setPlace(smallEventRequest.getPlace());
-        //smallEvent.setDuration(smallEventRequest.getDuration());
+        smallEvent.setDuration(smallEventRequest.getDuration());
         smallEvent.setUrl(smallEventRequest.getUrl());
         smallEvent.setDetail(newDetailPath);
         smallEvent.setDetail2(smallEventRequest.getDetail2());
