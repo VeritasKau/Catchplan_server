@@ -87,16 +87,17 @@ public class SmallEventService {
                 String cleanedDetailUrl = decodedDetailUrl.replace("%25", "");
                 String cleanedDetailUrl2= cleanedDetailUrl.replace("https://catchplan.s3.ap-northeast-2.amazonaws.com/https://catchplan.s3.ap-northeast-2.amazonaws.com/", "https://catchplan.s3.ap-northeast-2.amazonaws.com/");
 
-
                 // Create SmallEventResponse and add to the list
                 SmallEventResponse smallEventResponse = SmallEventResponse.of(
                         smallEvent.getId(),
-                        cleanedUrl2,
+                        imageUrl,
+                        //cleanedUrl2,
                         smallEvent.getText(),
                         smallEvent.getPlace(),
                         smallEvent.getDuration(),
                         smallEvent.getUrl(),
-                        cleanedDetailUrl2,
+                        //cleanedDetailUrl2,
+                        detail1Url,
                         smallEvent.getDetail2(),
                         smallEvent.getStatus()
                 );
@@ -109,6 +110,7 @@ public class SmallEventService {
         }
         return smallEventResponses;
     }
+
 
     //id가지고 small_event 한개만 가져오는거 혹시 필요할수도 있으니까
     @Transactional
