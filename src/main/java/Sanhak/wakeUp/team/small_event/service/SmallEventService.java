@@ -25,7 +25,7 @@ public class SmallEventService {
 
     //small event생성하기
     @Transactional
-    public void createSmallEvent(SmallEventRequest smallEventRequest, MultipartFile image) throws IOException {
+    public void createSmallEvent(SmallEventRequest smallEventRequest, MultipartFile image,MultipartFile detail) throws IOException {
         // 이미지를 base64로 인코딩
         String base64Image = encodeFileToBase64(image);
 
@@ -34,7 +34,8 @@ public class SmallEventService {
 
         // 상세 이미지도 동일하게 처리
         //String base64Detail = (detail1 != null && !detail1.isEmpty()) ? encodeFileToBase64(detail1) : null;
-        //String detailPath = (detail1 != null && !detail1.isEmpty()) ? s3UploadService.saveFile(detail1) : null;
+
+        String detailPath = (detail != null && !detail.isEmpty()) ? s3UploadService.saveFile(detail) : null;
 
         // 나머지 로직은 변경하지 않음
 
@@ -48,13 +49,13 @@ public class SmallEventService {
 
         SmallEvent newSmallEvent = SmallEvent.builder()
                 .image(imagePath)
-                //.text(smallEventRequest.getText())
-                //.place(smallEventRequest.getPlace())
+                .text(smallEventRequest.getText())
+                .place(smallEventRequest.getPlace())
                 //.duration(String.valueOf(duration))
-                //.url(smallEventRequest.getUrl())
-                //.detail(detailPath)
-                //.detail2(smallEventRequest.getDetail2())
-                //.status(true)
+                .url(smallEventRequest.getUrl())
+                .detail(detailPath)
+                .detail2(smallEventRequest.getDetail2())
+                .status(true)
                 .build();
 
         smallEventRepository.save(newSmallEvent);
@@ -174,39 +175,39 @@ public class SmallEventService {
 
     //small event 수정(update)
     //먼가 기존 수정파일을 불러와서 교체를 하고싶은데 나는  우리 LMS처럼 들어가면 원래 내가 쓴정보가 있어서 그정보에서 수정할수있는 그런느낌
-//    @Transactional
-//    public SmallEventResponse editSmallEvent(SmallEventRequest smallEventRequest, Long id, MultipartFile image, MultipartFile detail) throws IOException {
-//        SmallEvent smallEvent = smallEventRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException("이벤트를 찾을 수 없습니다. Id: " + id));
-//
-//
-//        String newImagePath = s3UploadService.saveFile(image);
-//        String newDetailPath = s3UploadService.saveFile(detail);
-//
-//        //smallEvent.setImage(image);
-//        smallEvent.setImage(newImagePath);
-//        smallEvent.setText(smallEventRequest.getText());
-//        smallEvent.setPlace(smallEventRequest.getPlace());
-//        smallEvent.setDuration(smallEventRequest.getDuration());
-//        smallEvent.setUrl(smallEventRequest.getUrl());
-//        smallEvent.setDetail(newDetailPath);
-//        smallEvent.setDetail2(smallEventRequest.getDetail2());
-//
-//        // Save the updated smallEvent
-//        smallEventRepository.save(smallEvent);
-//
-//        return SmallEventResponse.of(
-//                smallEvent.getId(),
-//                smallEvent.getImage(),
-//                smallEvent.getText(),
-//                smallEvent.getPlace(),
-//                smallEvent.getDuration(),
-//                smallEvent.getUrl(),
-//                smallEvent.getDetail(),
-//                smallEvent.getDetail2(),
-//                smallEvent.getStatus()
-//        );
-//    }
+    @Transactional
+    public SmallEventResponse editSmallEvent(SmallEventRequest smallEventRequest, Long id, MultipartFile image, MultipartFile detail) throws IOException {
+        SmallEvent smallEvent = smallEventRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("이벤트를 찾을 수 없습니다. Id: " + id));
+
+
+        String newImagePath = s3UploadService.saveFile(image);
+        String newDetailPath = s3UploadService.saveFile(detail);
+
+        //smallEvent.setImage(image);
+        smallEvent.setImage(newImagePath);
+        smallEvent.setText(smallEventRequest.getText());
+        smallEvent.setPlace(smallEventRequest.getPlace());
+        //smallEvent.setDuration(smallEventRequest.getDuration());
+        smallEvent.setUrl(smallEventRequest.getUrl());
+        smallEvent.setDetail(newDetailPath);
+        smallEvent.setDetail2(smallEventRequest.getDetail2());
+
+        // Save the updated smallEvent
+        smallEventRepository.save(smallEvent);
+
+        return SmallEventResponse.of(
+                smallEvent.getId(),
+                smallEvent.getImage(),
+                smallEvent.getText(),
+                smallEvent.getPlace(),
+                smallEvent.getDuration(),
+                smallEvent.getUrl(),
+                smallEvent.getDetail(),
+                smallEvent.getDetail2(),
+                smallEvent.getStatus()
+        );
+    }
 
 
     //small event삭제
