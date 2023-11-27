@@ -30,15 +30,15 @@ public class SmallEventController {
     @PostMapping(value = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<String> createSmallEvent(
             @ModelAttribute SmallEventRequest smallEventRequest,
-            @RequestPart MultipartFile image,
-            @RequestPart MultipartFile detail
+            @RequestPart MultipartFile image
+            //@RequestPart MultipartFile detail
     ) {
         try {
             // Set the MultipartFile fields in the SmallEventRequest
             smallEventRequest.setImage(image);
-            smallEventRequest.setDetail(detail);
+            //smallEventRequest.setDetail(detail);
 
-            smallEventService.createSmallEvent(smallEventRequest,image,detail);
+            smallEventService.createSmallEvent(smallEventRequest,image);
             return new ResponseEntity<>("OK", HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace(); // Handle the exception appropriately, e.g., log it

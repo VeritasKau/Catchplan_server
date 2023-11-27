@@ -11,7 +11,7 @@ public class SmallEventRequest {
     private String url;
     private String detail2;
     private MultipartFile image;
-    private MultipartFile detail;
+    //private MultipartFile detail;
 
 //    public String getImage() {
 //        return null;

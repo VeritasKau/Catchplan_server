@@ -25,7 +25,7 @@ public class SmallEventService {
 
     //small event생성하기
     @Transactional
-    public void createSmallEvent(SmallEventRequest smallEventRequest, MultipartFile image,MultipartFile detail) throws IOException {
+    public void createSmallEvent(SmallEventRequest smallEventRequest, MultipartFile image) throws IOException {
         // 이미지를 base64로 인코딩
         String base64Image = encodeFileToBase64(image);
 
@@ -35,7 +35,7 @@ public class SmallEventService {
         // 상세 이미지도 동일하게 처리
         //String base64Detail = (detail1 != null && !detail1.isEmpty()) ? encodeFileToBase64(detail1) : null;
 
-        String detailPath = (detail != null && !detail.isEmpty()) ? s3UploadService.saveFile(detail) : null;
+        //String detailPath = (detail != null && !detail.isEmpty()) ? s3UploadService.saveFile(detail) : null;
 
         // 나머지 로직은 변경하지 않음
 
@@ -53,7 +53,7 @@ public class SmallEventService {
                 .place(smallEventRequest.getPlace())
                 //.duration(String.valueOf(duration))
                 .url(smallEventRequest.getUrl())
-                .detail(detailPath)
+                //.detail(detailPath)
                 .detail2(smallEventRequest.getDetail2())
                 .status(true)
                 .build();
