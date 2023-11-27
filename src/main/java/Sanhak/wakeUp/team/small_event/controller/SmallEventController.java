@@ -30,15 +30,15 @@ public class SmallEventController {
     @PostMapping(value = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<String> createSmallEvent(
             @ModelAttribute SmallEventRequest smallEventRequest,
-            @RequestPart MultipartFile image,
-            @RequestPart MultipartFile detail
+            @RequestPart MultipartFile image
+            //@RequestPart MultipartFile detail
     ) {
         try {
             // Set the MultipartFile fields in the SmallEventRequest
             smallEventRequest.setImage(image);
-            smallEventRequest.setDetail(detail);
+            //smallEventRequest.setDetail(detail);
 
-            smallEventService.createSmallEvent(smallEventRequest,image,detail);
+            smallEventService.createSmallEvent(smallEventRequest,image);
             return new ResponseEntity<>("OK", HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace(); // Handle the exception appropriately, e.g., log it
@@ -78,22 +78,22 @@ public class SmallEventController {
 
     //작성한 small event 업데이트
     //path는 그냥쓰고 requestparm은 ?붙히고
-    @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<String> editSmallEvent(@ModelAttribute SmallEventRequest smallEventRequest,
-                                                 @RequestPart MultipartFile image,
-                                                 @RequestPart MultipartFile detail,
-                                                 @PathVariable("id")Long id){
-        try {
-            SmallEventResponse editSmallEvent = smallEventService.editSmallEvent(smallEventRequest, id,image,detail);
-            if (editSmallEvent != null) {
-                return new ResponseEntity<>("OK", HttpStatus.OK);
-            }else{
-                return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
-            }
-        }catch (Exception e){
-            return new ResponseEntity<>("Error",HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+//    public ResponseEntity<String> editSmallEvent(@ModelAttribute SmallEventRequest smallEventRequest,
+//                                                 @RequestPart MultipartFile image,
+//                                                 @RequestPart MultipartFile detail,
+//                                                 @PathVariable("id")Long id){
+//        try {
+//            SmallEventResponse editSmallEvent = smallEventService.editSmallEvent(smallEventRequest, id,image,detail);
+//            if (editSmallEvent != null) {
+//                return new ResponseEntity<>("OK", HttpStatus.OK);
+//            }else{
+//                return new ResponseEntity<>("Not Found",HttpStatus.NOT_FOUND);
+//            }
+//        }catch (Exception e){
+//            return new ResponseEntity<>("Error",HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
 
     //작성한 small event삭제

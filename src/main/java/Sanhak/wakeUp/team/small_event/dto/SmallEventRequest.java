@@ -5,13 +5,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class SmallEventRequest {
-    private String text;
-    private String place;
-    private String duration;
-    private String url;
-    private String detail2;
+    //private String text;
+    //private String place;
+    //private String duration;
+    //private String url;
+    //private String detail2;
     private MultipartFile image;
-    private MultipartFile detail;
+    //private MultipartFile detail;
 
 //    public String getImage() {
 //        return null;
