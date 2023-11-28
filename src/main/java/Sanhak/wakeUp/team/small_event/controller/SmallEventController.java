@@ -31,7 +31,7 @@ public class SmallEventController {
     public ResponseEntity<String> createSmallEvent(
             @ModelAttribute SmallEventRequest smallEventRequest,
             @RequestPart MultipartFile image,
-            @RequestPart MultipartFile detail
+            @RequestPart(required = false) MultipartFile detail
     ) {
         try {
             // Set the MultipartFile fields in the SmallEventRequest
