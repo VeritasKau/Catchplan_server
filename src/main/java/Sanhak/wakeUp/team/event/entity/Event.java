@@ -26,7 +26,7 @@ public class Event {
     private String url;
     private String detail;
     private String detail2;
-    private Integer status;
+    private Boolean status;
     //@OneToMany(mappedBy = "event")
     //private List<Scrap> scraps = new ArrayList<>();
 }
