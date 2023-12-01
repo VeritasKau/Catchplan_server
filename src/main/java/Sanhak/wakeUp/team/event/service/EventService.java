@@ -170,7 +170,7 @@ public class EventService {
 
         for (Event event : events) {
             if (isEventExpired(event)) {
-                event.setStatus(false);
+                event.setStatus(0);
                 eventRepository.save(event);
             }
         }
