@@ -165,26 +165,4 @@ public class EventService {
         return eventResponses;
     }
 
-    public void updateEventStatus() {
-        List<Event> events = eventRepository.findAll();
-
-        for (Event event : events) {
-            if (isEventExpired(event)) {
-                event.setStatus(0);
-                eventRepository.save(event);
-            }
-        }
-    }
-
-    private boolean isEventExpired(Event event) {
-        String duration = event.getDuration();
-        LocalDate endDate;
-        if (duration.contains("~")) {
-            endDate = LocalDate.parse(duration.split("~")[1], DateTimeFormatter.ofPattern("yyyy.MM.dd"));
-        } else {
-            endDate = LocalDate.parse(duration, DateTimeFormatter.ofPattern("yyyy.MM.dd"));
-        }
-
-        return LocalDate.now().isAfter(endDate);
-    }
 }
